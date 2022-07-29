@@ -1,5 +1,5 @@
-class PublishingApiPayload
-  def initialize(contentful_client:, contentful_entry:,  base_path:, title:, description: "")
+class PublishingApiContentPayload
+  def initialize(contentful_client:, contentful_entry:, base_path:, title:, description: "")
     @contentful_client = contentful_client
     @contentful_entry = contentful_entry
     @base_path = base_path
@@ -32,24 +32,44 @@ private
   attr_reader :contentful_client, :contentful_entry, :base_path, :title, :description
 
   # TODO: include contentful ids in hashes and deal with recursive references
-  def build_details(item)
+  def build_details(item, entry_ids = [])
     case item
     when String, Numeric, true, false
       item
     when DateTime
       item.rfc3339
     when Array
-      item.map { |i| build_details(i) }
+      item.map { |i| build_details(i, entry_ids) }
     when Hash
-      item.transform_values { |i| build_details(i) }
+      item.transform_values { |i| build_details(i, entry_ids) }
     when Contentful::Entry
-      build_details(item.fields)
+      entry_details(item, entry_ids)
     when Contentful::Link
-      build_details(item.resolve(contentful_client))
+      build_details(item.resolve(contentful_client), entry_ids)
     when Contentful::Asset
-      { url: item.url }
+      {
+        cms_entity: "asset",
+        cms_id: item.id,
+        url: item.url
+      }
     else
       raise "#{item.class} is not configured to be represented as JSON for Publishing API"
+    end
+  end
+
+  def entry_details(entry, entry_ids)
+    base = {
+      cms_entity: "entry",
+      cms_id: entry.id
+    }
+
+    # if we've already visited an entry in this tree we're in a recursive loop
+    # so we'll just return a reference
+    if entry_ids.include?(entry.id)
+      base
+    else
+      fields = base.merge(entry.fields.except(base.keys))
+      build_details(fields, entry_ids + [entry.id])
     end
   end
 end
