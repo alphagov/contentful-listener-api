@@ -1,16 +1,17 @@
 class PublishingApiContentPayload
-  def initialize(contentful_client:, contentful_entry:, base_path:, title:, description: "")
+  def initialize(contentful_client:, contentful_entry:, base_path:, title:, locale: "en", description: "")
     @contentful_client = contentful_client
     @contentful_entry = contentful_entry
     @base_path = base_path
     @title = title
+    @locale = locale
     @description = description
   end
 
   def payload
-    {
+    @payload ||= {
       base_path: base_path,
-      locale: "en",
+      locale: locale,
       schema_name: "special_route",
       document_type: "special_route",
       publishing_app: "contentful-listener",
@@ -18,20 +19,15 @@ class PublishingApiContentPayload
       update_type: "major",
       title: title,
       description: description,
-      details: details,
+      details: build_details(contentful_entry),
       routes: [{ path: base_path, type: "exact" }],
     }
   end
 
-  def details
-    @details ||= build_details(contentful_entry)
-  end
-
 private
 
-  attr_reader :contentful_client, :contentful_entry, :base_path, :title, :description
+  attr_reader :contentful_client, :contentful_entry, :base_path, :title, :locale, :description
 
-  # TODO: include contentful ids in hashes and deal with recursive references
   def build_details(item, entry_ids = [])
     case item
     when String, Numeric, true, false
