@@ -33,6 +33,10 @@ module PublishingApi
       !content_equivalent?(payload, live_content)
     end
 
+    def lock_version
+      most_recent_content == CONTENT_NOT_FOUND ? 0 : most_recent_content["lock_version"]
+    end
+
   private
 
     def content_equivalent?(payload, publishing_api_response)

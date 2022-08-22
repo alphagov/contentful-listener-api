@@ -16,21 +16,25 @@ module PublishingApi
     end
 
     def call
-      contentful_entry = contentful_client.entry(content_config.contentful_entry_id)
+      attributes = content_config.publishing_api_attributes.merge(previous_version: content_state.lock_version.to_s)
 
       content_payload = ContentPayload.new(
         contentful_client:,
-        contentful_entry:,
-        publishing_api_attributes: content_config.publishing_api_attributes
+        contentful_entry: contentful_client.entry(content_config.contentful_entry_id),
+        publishing_api_attributes: attributes,
       )
 
       if content_state.update_live?(content_payload.payload)
-        GdsApi.publishing_api.put_content(
+        response = GdsApi.publishing_api.put_content(
           content_config.content_id,
           content_payload.payload,
         )
+
         # probably should include previous version here
-        GdsApi.publishing_api.publish(content_config.content_id, nil, locale: content_config.locale)
+        GdsApi.publishing_api.publish(content_config.content_id,
+                                      nil,
+                                      locale: content_config.locale,
+                                      previous_version: response["lock_version"].to_s)
       end
     end
 

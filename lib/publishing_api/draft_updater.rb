@@ -15,12 +15,12 @@ module PublishingApi
     end
 
     def call
-      contentful_entry = contentful_client.entry(content_config.contentful_entry_id)
+      attributes = content_config.publishing_api_attributes.merge(previous_version: content_state.lock_version.to_s)
 
       content_payload = ContentPayload.new(
         contentful_client:,
-        contentful_entry:,
-        publishing_api_attributes: content_config.publishing_api_attributes
+        contentful_entry: contentful_client.entry(content_config.contentful_entry_id),
+        publishing_api_attributes: attributes,
       )
 
       if content_state.update_draft?(content_payload.payload)
