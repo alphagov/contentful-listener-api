@@ -1,6 +1,8 @@
 # GOV.UK Homepage
 - contentful_entry_id: 64EsT2ttgsJMDm6VxnOWtX
-  content_id: f3bbdec2-0e62-4520-a7fd-6ffd5d36e03a
-  base_path: /
-  title: GOV.UK homepage
-  description: ""
+  content_id: d9ec2fd0-d7ad-433d-ad16-d4cdd62d4062
+  publishing_api_attributes:
+    base_path: /test-page
+    title: GOV.UK homepage
+    description: ""
+    rendering_app: frontend

@@ -1,14 +1,15 @@
 $LOAD_PATH << "#{__dir__}/lib"
-require "gds-api-adapters"
 require "contentful"
+require "gds-api-adapters"
+require "publishing_api_content_payload"
 require "sinatra"
 require "sinatra/reloader"
-require "publishing_api_content_payload"
+require "yaml"
 
 post "/listener" do
-  webhook = Webhook.new(JSON.parse(request.body.read))
+  webhook = Webhook.new(request.env["HTTP_X_CONTENTFUL_TOPIC"], JSON.parse(request.body.read))
 
-  halt(200, "Not an event we care about") unless webhook.event_of_interest?
+  halt(200, "No work done: #{webhook.topic} is not an event that we track") unless webhook.event_of_interest?
 
   # Potential async opportuntity
   # It's unclear whether we'll be at risk of webhook's timing out if we try
@@ -49,25 +50,41 @@ end
 # A class to make it abstract the questions we want to ask of a Contentful
 # Webhook payload
 class Webhook
-  def initialize(payload)
+  attr_reader :topic, :payload
+
+  def initialize(topic, payload)
+    @topic = topic.to_s
     @payload = payload
   end
 
-  # Work out if this is a topic that we care about
-  # We care about topics of entry (and maybe asset)
-  # We care about all the actions: create, save, auto_save, archive, unarchive, publish, unpublish, delete
+  # Note: It's unclear what we should do if someone archives/unpublishes/deletes the root
+  # item
   def event_of_interest?
-    true
+    %w[create save auto_save archive unarchive publish unpublish delete].include?(cms_event)
   end
 
   def entity_id
-    "an-id-to-represent-a-contenful-entry"
+    type = payload.dig("sys", "type")
+    id = payload.dig("sys", "id")
+
+    raise "Unable to identify entity id" unless type && id
+
+    "#{type}:#{id}"
   end
 
-  # Work out whether this chnage represents a change to the live version
+  # Work out whether this change represents a change to the live version
   # as many will only affect the draft
   def live_change?
-    true
+    %w[archive unarchive publish unpublish delete].include?(cms_event)
+  end
+
+private
+
+  def cms_event
+    split_topic = topic.split(".")
+    return if split_topic[0] != "ContentManagement" || !%w[Entry Asset].include?(split_topic[1])
+
+    split_topic[2]
   end
 end
 
@@ -93,8 +110,8 @@ class GovukContentIdentifier
 private
 
   def configured_content
-    match = ContentConfig.all.find { |cc| entity_id == "entry:#{cc.contentful_entry_id}" }
-    match ? [{ "content_id" => match.content_id, "locale" => match.locale }] : []
+    match = ContentConfig.all.find { |cc| entity_id == "Entry:#{cc.contentful_entry_id}" }
+    match ? [{ content_id: match.content_id, locale: match.locale }] : []
   end
 
   def publishing_api_editions
@@ -104,7 +121,7 @@ private
       fields: %w[content_id locale],
     )
 
-    pages.flat_map { |page| page["results"] }
+    pages.flat_map { |page| page["results"] }.map(&:symbolize_keys)
   end
 end
 
@@ -120,15 +137,16 @@ class ContentConfig
              end
   end
 
-  attr_reader :contentful_entry_id, :content_id, :locale, :base_path, :title, :description
+  attr_reader :contentful_entry_id, :content_id, :publishing_api_attributes
 
   def initialize(attributes)
     @contentful_entry_id = attributes.fetch("contentful_entry_id")
     @content_id = attributes.fetch("content_id")
-    @locale = attributes.fetch("locale", "en")
-    @base_path = attributes.fetch("base_path")
-    @title = attributes.fetch("title")
-    @description = attributes.fetch("description", "")
+    @publishing_api_attributes = attributes.fetch("publishing_api_attributes", {})
+  end
+
+  def locale
+    publishing_api_attributes.fetch("locale", "en")
   end
 end
 
@@ -139,9 +157,8 @@ end
 class PublishingApiLiveUpdater
   attr_reader :content_config, :publishing_api_content
 
-  def initialize(content_config, publishing_api_content)
+  def initialize(content_config)
     @content_config = content_config
-    @publishing_api_content = publishing_api_content
   end
 
   def self.call(...)
@@ -150,22 +167,20 @@ class PublishingApiLiveUpdater
 
   def call
     contentful_entry = contentful_client.entry(content_config.contentful_entry_id)
+
     content_payload = PublishingApiContentPayload.new(
       contentful_client:,
       contentful_entry:,
-      base_path: content_config.base_path,
-      locale: content_config.locale,
-      title: content_config.title,
-      description: content_config.description,
+      publishing_api_attributes: content_config.publishing_api_attributes
     )
 
     if publishing_api_content.update_live?(content_payload.payload)
       GdsApi.publishing_api.put_content(
         content_config.content_id,
-        content_payload.payload.merge(previous_version: publishing_api_content.previous_version)
+        content_payload.payload,
       )
       # probably should include previous version here
-      GdsApi.publishing_api.publish(content_id, locale: content_config.locale)
+      GdsApi.publishing_api.publish(content_config.content_id, nil, locale: content_config.locale)
     end
   end
 
@@ -175,6 +190,10 @@ private
     @contentful_client ||= Contentful::Client.new(access_token: ENV["CONTENTFUL_LIVE_ACCESS_TOKEN"],
                                                   space: ENV["CONTENTFUL_SPACE_ID"])
 
+  end
+
+  def publishing_api_content
+    @publishing_api_content ||= PublishingApiContent.new(content_config.content_id, content_config.locale)
   end
 end
 
@@ -194,20 +213,17 @@ class PublishingApiDraftUpdater
 
   def call
     contentful_entry = contentful_client.entry(content_config.contentful_entry_id)
+
     content_payload = PublishingApiContentPayload.new(
       contentful_client:,
       contentful_entry:,
-      base_path: content_config.base_path,
-      locale: content_config.locale,
-      title: content_config.title,
-      description: content_config.description,
+      publishing_api_attributes: content_config.publishing_api_attributes
     )
 
     if publishing_api_content.update_draft?(content_payload.payload)
       GdsApi.publishing_api.put_content(
         content_config.content_id,
-        # should include previous version
-        content_payload.payload
+        content_payload.payload,
       )
     end
   end
@@ -230,13 +246,14 @@ class PublishingApiContent
   CONTENT_NOT_FOUND = Class.new
   COMPARED_ATTRIBUTES = %w[
     base_path
-    title
     description
     details
     publishing_app
     rendering_app
     routes
     schema_name
+    title
+    update_type
   ]
 
   def initialize(content_id, locale = "en")
@@ -247,13 +264,13 @@ class PublishingApiContent
   def update_draft?(payload)
     return true if draft_content == CONTENT_NOT_FOUND
 
-    content_equivalent?(payload, draft_content)
+    !content_equivalent?(payload, draft_content)
   end
 
   def update_live?(payload)
     return true if live_content == CONTENT_NOT_FOUND
 
-    content_equivalent?(payload, live_content)
+    !content_equivalent?(payload, live_content)
   end
 
 private
@@ -263,8 +280,8 @@ private
   end
 
   def draft_content
-    if most_recent_content == CONTENT_NOT_FOUND
-      || !%w[draft published].includes?(most_recent_content["publication_state"])
+    if most_recent_content == CONTENT_NOT_FOUND ||
+      !%w[draft published].include?(most_recent_content["publication_state"])
       CONTENT_NOT_FOUND
     else
       most_recent_content
