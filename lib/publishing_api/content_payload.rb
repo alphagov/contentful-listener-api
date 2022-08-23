@@ -72,10 +72,7 @@ module PublishingApi
       when Contentful::Link
         build_details(item.resolve(contentful_client), entry_ids)
       when Contentful::Asset
-        {
-          "cms_id" => cms_id("Asset", item.id),
-          "url" => item.url,
-        }
+        asset_details(item)
       else
         raise "#{item.class} is not configured to be represented as JSON for Publishing API"
       end
@@ -89,9 +86,27 @@ module PublishingApi
       if entry_ids.include?(entry.id)
         base
       else
-        fields = base.merge(entry.fields.transform_keys(&:to_s).except(base.keys))
+        fields = base.merge(entry.fields.transform_keys(&:to_s).except(*base.keys))
         build_details(fields, entry_ids + [entry.id])
       end
+    end
+
+    def asset_details(asset)
+      base = { "cms_id" => cms_id("Asset", asset.id) }
+
+      asset_fields = asset.fields.transform_keys(&:to_s).except(*(base.keys + %w[file]))
+
+      file_attributes = if asset.file
+                          {
+                            "content_type" => asset.file.content_type,
+                            "details" => asset.file.details,
+                            "url" => asset.url
+                          }
+                        else
+                          {}
+                        end
+
+      base.merge(asset_fields).merge({ "file" => file_attributes })
     end
 
     def cms_id(entity, entity_id)
