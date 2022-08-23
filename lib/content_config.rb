@@ -12,9 +12,10 @@ class ContentConfig
              end
   end
 
-  attr_reader :contentful_entry_id, :content_id, :publishing_api_attributes
+  attr_reader :contentful_space_id, :contentful_entry_id, :content_id, :publishing_api_attributes
 
   def initialize(attributes)
+    @contentful_space_id = attributes.fetch("contentful_space_id")
     @contentful_entry_id = attributes.fetch("contentful_entry_id")
     @content_id = attributes.fetch("content_id")
     @publishing_api_attributes = attributes.fetch("publishing_api_attributes", {})

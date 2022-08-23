@@ -1,5 +1,6 @@
 # GOV.UK Homepage
-- contentful_entry_id: 64EsT2ttgsJMDm6VxnOWtX
+- contentful_space_id: q15b851vpa2y
+  contentful_entry_id: 64EsT2ttgsJMDm6VxnOWtX
   content_id: d9ec2fd0-d7ad-433d-ad16-d4cdd62d4062
   publishing_api_attributes:
     base_path: /test-page
