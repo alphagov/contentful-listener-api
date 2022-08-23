@@ -28,7 +28,7 @@ module ContentfulClient
 
     raise "No access token configuration for space: #{space_id}" unless config
 
-    config["draft_access_token"]
+    config["live_access_token"]
   end
 
   def self.access_token_config
