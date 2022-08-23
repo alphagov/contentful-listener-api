@@ -15,12 +15,13 @@ class Webhook
   end
 
   def entity_id
+    space_id = payload.dig("sys", "space", "sys", "id")
     type = payload.dig("sys", "type")
-    id = payload.dig("sys", "id")
+    entity_id = payload.dig("sys", "id")
 
-    raise "Unable to identify entity id" unless type && id
+    raise "Unable to identify entity id" unless space_id && type && entity_id
 
-    "#{type}:#{id}"
+    "#{space_id}:#{type}:#{entity_id}"
   end
 
   # Work out whether this change represents a change to the live version

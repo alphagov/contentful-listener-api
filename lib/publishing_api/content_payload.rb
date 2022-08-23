@@ -43,10 +43,10 @@ module PublishingApi
 
     def establish_cms_entity_ids(input, found_entity_ids = [])
       if input.is_a?(Hash)
-        found_entity_ids << "#{input['cms_entity']}:#{input['cms_id']}" if input["cms_entity"] && input["cms_id"]
+        found_entity_ids << input["cms_id"] if input["cms_id"]
 
         input
-          .except(*%w[cms_entity cms_id])
+          .except(*%w[cms_id])
           .values
           .flat_map { |item| establish_cms_entity_ids(item, found_entity_ids) }
           .uniq
@@ -73,9 +73,8 @@ module PublishingApi
         build_details(item.resolve(contentful_client), entry_ids)
       when Contentful::Asset
         {
-          "cms_entity" => "Asset",
-          "cms_id" => item.id,
-          "url" => item.url
+          "cms_id" => cms_id("Asset", item.id),
+          "url" => item.url,
         }
       else
         raise "#{item.class} is not configured to be represented as JSON for Publishing API"
@@ -83,10 +82,7 @@ module PublishingApi
     end
 
     def entry_details(entry, entry_ids)
-      base = {
-        "cms_entity" => "Entry",
-        "cms_id" => entry.id
-      }
+      base = { "cms_id" => cms_id("Entry", entry.id) }
 
       # if we've already visited an entry in this tree we're in a recursive loop
       # so we'll just return a reference
@@ -96,6 +92,10 @@ module PublishingApi
         fields = base.merge(entry.fields.transform_keys(&:to_s).except(base.keys))
         build_details(fields, entry_ids + [entry.id])
       end
+    end
+
+    def cms_id(entity, entity_id)
+      "#{contentful_client.configuration[:space]}:#{entity}:#{entity_id}"
     end
   end
 end
