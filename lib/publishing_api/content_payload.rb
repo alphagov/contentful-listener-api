@@ -15,6 +15,7 @@ module PublishingApi
         "update_type" => publishing_api_attributes.fetch("update_type", "major"),
         "details" => details,
         "routes" => routes,
+        "cms_entity_ids" => establish_cms_entity_ids(details),
       })
     end
 
@@ -32,6 +33,22 @@ module PublishingApi
       base_path = publishing_api_attributes["base_path"]
 
       [{ "path" => base_path, "type" => "exact" }]
+    end
+
+    def establish_cms_entity_ids(input, found_entity_ids = [])
+      if input.is_a?(Hash)
+        found_entity_ids << "#{input['cms_entity']}:#{input['cms_id']}" if input["cms_entity"] && input["cms_id"]
+
+        input
+          .except(*%w[cms_entity cms_id])
+          .values
+          .flat_map { |item| establish_cms_entity_ids(item, found_entity_ids) }
+          .uniq
+      elsif input.is_a?(Array)
+        input.flat_map { |item| establish_cms_entity_ids(item, found_entity_ids) }.uniq
+      else
+        found_entity_ids
+      end
     end
 
     def build_details(item, entry_ids = [])
