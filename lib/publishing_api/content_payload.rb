@@ -6,8 +6,12 @@ module PublishingApi
       @publishing_api_attributes = publishing_api_attributes
     end
 
-    def payload
-      @payload ||= publishing_api_attributes.merge({
+    def self.call(...)
+      new(...).call
+    end
+
+    def call
+      publishing_api_attributes.merge({
         "locale" => publishing_api_attributes.fetch("locale", "en"),
         "schema_name" => publishing_api_attributes.fetch("schema_name", "special_route"),
         "document_type" => publishing_api_attributes.fetch("document_type", "special_route"),
@@ -18,6 +22,8 @@ module PublishingApi
         "cms_entity_ids" => establish_cms_entity_ids(details),
       })
     end
+
+    private_class_method :new
 
   private
 
