@@ -21,13 +21,13 @@ module PublishingApi
       @locale = locale
     end
 
-    def update_draft?(payload)
+    def needs_draft_update?(payload)
       return true if draft_content == CONTENT_NOT_FOUND
 
       !content_equivalent?(payload, draft_content)
     end
 
-    def update_live?(payload)
+    def needs_live_update?(payload)
       return true if live_content == CONTENT_NOT_FOUND
 
       !content_equivalent?(payload, live_content)

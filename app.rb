@@ -21,8 +21,8 @@ post "/listener" do
 
     next unless content_config
 
-    PublishingApi::LiveUpdater.call(content_config) if webhook.live_change?
-    PublishingApi::DraftUpdater.call(content_config)
+    PublishingApi::Updater.update_live(content_config) if webhook.live_change?
+    PublishingApi::Updater.update_draft(content_config)
   end
 
   status 200
