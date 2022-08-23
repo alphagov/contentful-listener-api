@@ -4,12 +4,14 @@ require "yaml"
 module ContentfulClient
   def self.draft_client(space_id)
     Contentful::Client.new(access_token: draft_access_token(space_id),
-                           space: space_id,
-                           api_url: "preview.contentful.com")
+                           api_url: "preview.contentful.com",
+                           environment: ENV.fetch("CONTENTFUL_ENVIRONMENT", "master"),
+                           space: space_id)
   end
 
   def self.live_client(space_id)
     Contentful::Client.new(access_token: live_access_token(space_id),
+                           environment: ENV.fetch("CONTENTFUL_ENVIRONMENT", "master"),
                            space: space_id)
   end
 

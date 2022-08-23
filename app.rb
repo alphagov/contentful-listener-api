@@ -8,6 +8,7 @@ require "webhook"
 post "/listener" do
   webhook = Webhook.new(request.env["HTTP_X_CONTENTFUL_TOPIC"], JSON.parse(request.body.read))
 
+  halt(200, "No work done: #{webhook.environment} is not from the expected environment") unless webhook.expected_environment?
   halt(200, "No work done: #{webhook.topic} is not an event that we track") unless webhook.event_of_interest?
 
   # Potential async opportuntity

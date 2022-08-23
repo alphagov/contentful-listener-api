@@ -30,6 +30,14 @@ class Webhook
     %w[archive unarchive publish unpublish delete].include?(cms_event)
   end
 
+  def environment
+    payload.dig("sys", "environment", "sys", "id")
+  end
+
+  def expected_environment?
+    environment == ENV.fetch("CONTENTFUL_ENVIRONMENT", "master")
+  end
+
 private
 
   def cms_event
