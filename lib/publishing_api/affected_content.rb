@@ -41,7 +41,8 @@ module PublishingApi
         fields: %w[content_id locale],
       )
 
-      pages.flat_map { |page| page["results"] }.map(&:symbolize_keys)
+      pages.flat_map { |page| page["results"] }
+           .map { |item| item.transform_keys(&:to_sym) }
     end
   end
 end

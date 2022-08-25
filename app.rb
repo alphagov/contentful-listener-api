@@ -1,6 +1,7 @@
 $LOAD_PATH << "#{__dir__}/lib"
 require "content_config"
 require "publishing_api"
+require "result"
 require "sinatra"
 require "sinatra/reloader"
 require "webhook"
@@ -17,18 +18,25 @@ post "/listener" do
 
   affected_content = PublishingApi::AffectedContent.call(webhook.entity_id)
 
-  affected_content.each do |item|
-    content_config = ContentConfig.find(item.fetch(:content_id), item.fetch(:locale))
+  all_results = affected_content.flat_map do |item|
+    content_id = item.fetch(:content_id)
+    locale = item.fetch(:locale)
 
-    next unless content_config
+    content_config = ContentConfig.find(content_id, locale)
 
-    PublishingApi::Updater.update_live(content_config) if webhook.live_change?
-    PublishingApi::Updater.update_draft(content_config)
+    next [Result.content_not_configured(content_id, locale)] unless content_config
+
+
+    results = []
+    results << PublishingApi::Updater.update_live(content_config) if webhook.live_change?
+    results << PublishingApi::Updater.update_draft(content_config)
+    results
   end
 
+  all_results << Result.no_affected_content if all_results.empty?
+
   status 200
-  # It'd be nice if we could communicate in our response what we did
-  body "Something"
+  body all_results.map(&:to_s).join("\n")
 rescue JSON::ParserError
   status 400
   body "Invalid JSON payload"

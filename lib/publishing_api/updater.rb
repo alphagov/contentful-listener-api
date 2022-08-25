@@ -1,5 +1,6 @@
 require "contentful_client"
 require "gds-api-adapters"
+require "result"
 
 module PublishingApi
   class Updater
@@ -19,10 +20,18 @@ module PublishingApi
       contentful_client = ContentfulClient.draft_client(content_config.contentful_space_id)
 
       retry_conflicts do |content_state|
-        content_payload = build_content_payload(contentful_client, content_state)
+        lock_version = content_state.lock_version
+        entry = contentful_client.entry(content_config.contentful_entry_id)
+
+        next Result.no_draft_root_entry(content_config) if !entry
+
+        content_payload = build_content_payload(contentful_client, entry, lock_version)
 
         if content_state.needs_draft_update?(content_payload)
           GdsApi.publishing_api.put_content(content_config.content_id, content_payload)
+          Result.draft_updated(content_config)
+        else
+          Result.draft_unchanged(content_config)
         end
       end
     end
@@ -31,7 +40,12 @@ module PublishingApi
       contentful_client = ContentfulClient.live_client(content_config.contentful_space_id)
 
       retry_conflicts do |content_state|
-        content_payload = build_content_payload(contentful_client, content_state)
+        lock_version = content_state.lock_version
+        entry = contentful_client.entry(content_config.contentful_entry_id)
+
+        next Result.no_live_root_entry(content_config) if !entry
+
+        content_payload = build_content_payload(contentful_client, entry, lock_version)
 
         if content_state.needs_live_update?(content_payload)
           response = GdsApi.publishing_api.put_content(content_config.content_id, content_payload)
@@ -40,6 +54,9 @@ module PublishingApi
                                         nil,
                                         locale: content_config.locale,
                                         previous_version: response["lock_version"].to_s)
+          Result.live_updated(content_config)
+        else
+          Result.live_unchanged(content_config)
         end
       end
     end
@@ -54,15 +71,11 @@ module PublishingApi
       @content_state ||= ContentState.new(content_config.content_id, content_config.locale)
     end
 
-    def build_content_payload(contentful_client, content_state)
+    def build_content_payload(contentful_client, contentful_entry, lock_version)
       attributes = content_config.publishing_api_attributes
-                                 .merge(previous_version: content_state.lock_version.to_s)
+                                 .merge(previous_version: lock_version.to_s)
 
-      ContentPayload.call(
-        contentful_client:,
-        contentful_entry: contentful_client.entry(content_config.contentful_entry_id),
-        publishing_api_attributes: attributes,
-      )
+      ContentPayload.call(contentful_client:, contentful_entry:, publishing_api_attributes: attributes)
     end
 
     def retry_conflicts
