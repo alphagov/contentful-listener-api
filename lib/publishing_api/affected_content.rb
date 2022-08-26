@@ -8,8 +8,6 @@ module PublishingApi
   class AffectedContent
     attr_reader :entity_id
 
-    # entity_id is expected to be a unique identifier for Contentful e.g. "entry:1nMBV6lN6G2xuMJCnHIj2i"
-    # we may want to pass in some sort of config object to know which documents we care about
     def initialize(entity_id)
       @entity_id = entity_id
     end
@@ -30,7 +28,7 @@ module PublishingApi
   private
 
     def configured_content
-      match = ContentConfig.all.find { |cc| entity_id == "Entry:#{cc.contentful_entry_id}" }
+      match = ContentConfig.all.find { |cc| entity_id == "#{cc.contentful_space_id}:Entry:#{cc.contentful_entry_id}" }
       match ? [{ content_id: match.content_id, locale: match.locale }] : []
     end
 
