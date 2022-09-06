@@ -12,6 +12,8 @@ module PublishingApi
 
     def call
       publishing_api_attributes.merge({
+        "title" => publishing_api_attributes.fetch("title", details["title"]),
+        "description" => publishing_api_attributes.fetch("description", details["description"]),
         "locale" => publishing_api_attributes.fetch("locale", "en"),
         "schema_name" => publishing_api_attributes.fetch("schema_name", "special_route"),
         "document_type" => publishing_api_attributes.fetch("document_type", "special_route"),
