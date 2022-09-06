@@ -7,3 +7,10 @@
     title: GOV.UK homepage
     description: ""
     rendering_app: frontend
+# Cost of living hub page
+- contentful_space_id: q15b851vpa2y
+  contentful_entry_id: Jid87gJxnMjLQlww1a4WF
+  content_id: b8c8daed-f783-46d4-b6a6-9f22c38defda
+  publishing_api_attributes:
+    base_path: /cost-of-living-contentful
+    rendering_app: collections
