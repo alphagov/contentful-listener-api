@@ -21,7 +21,7 @@ module PublishingApi
 
       retry_conflicts do |content_state|
         lock_version = content_state.lock_version
-        entry = contentful_client.entry(content_config.contentful_entry_id)
+        entry = contentful_client.entry(content_config.contentful_entry_id, include: 10)
 
         next Result.no_draft_root_entry(content_config) if !entry
 
@@ -41,7 +41,7 @@ module PublishingApi
 
       retry_conflicts do |content_state|
         lock_version = content_state.lock_version
-        entry = contentful_client.entry(content_config.contentful_entry_id)
+        entry = contentful_client.entry(content_config.contentful_entry_id, include: 10)
 
         next Result.no_live_root_entry(content_config) if !entry
 
