@@ -17,4 +17,7 @@ RSpec.configure do |config|
   # have no way to turn it off -- the option exists only for backwards
   # compatibility in RSpec 3).
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.order = :random
+  Kernel.srand(config.seed)
 end
