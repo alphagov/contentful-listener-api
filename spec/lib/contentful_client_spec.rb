@@ -1,17 +1,11 @@
 RSpec.describe ContentfulClient do
-  def stub_space(space_id)
-    allow(File).to receive(:read).with("config/access_tokens.yaml.erb").and_return <<~YAML
-      - space_id: #{space_id}
-        draft_access_token: draft-token
-        live_access_token: live-token
-    YAML
-  end
+  include StubConfig
 
   before { described_class.reset }
 
   describe ".live_client" do
     it "returns a Contentful::Client" do
-      stub_space("test")
+      stub_access_tokens_config(space_id: "test")
       expect(described_class.live_client("test")).to be_a(Contentful::Client)
     end
 
@@ -23,7 +17,7 @@ RSpec.describe ContentfulClient do
 
   describe ".draft_client" do
     it "returns a Contentful::Client" do
-      stub_space("test")
+      stub_access_tokens_config(space_id: "test")
       expect(described_class.draft_client("test")).to be_a(Contentful::Client)
     end
 

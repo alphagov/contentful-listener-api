@@ -1,4 +1,10 @@
+ENV["APP_ENV"] = "test"
+
 require_relative "../app"
+require "webmock/rspec"
+require "gds_api/test_helpers/publishing_api"
+
+Dir[File.join(__dir__, "support/**/*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

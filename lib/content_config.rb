@@ -12,6 +12,10 @@ class ContentConfig
     end
   end
 
+  def self.reset
+    @all = nil
+  end
+
   attr_reader :contentful_space_id, :contentful_entry_id, :content_id, :publishing_api_attributes
 
   def initialize(attributes)

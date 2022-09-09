@@ -7,7 +7,11 @@ require "sinatra/reloader"
 require "webhook"
 
 post "/listener" do
-  webhook = Webhook.new(request.env["HTTP_X_CONTENTFUL_TOPIC"], JSON.parse(request.body.read))
+  begin
+    webhook = Webhook.new(request.env["HTTP_X_CONTENTFUL_TOPIC"], JSON.parse(request.body.read))
+  rescue JSON::ParserError
+    halt(400, "Invalid JSON payload")
+  end
 
   halt(200, "No work done: #{webhook.environment} is not from the expected environment") unless webhook.expected_environment?
   halt(200, "No work done: #{webhook.topic} is not an event that we track") unless webhook.event_of_interest?
@@ -36,7 +40,4 @@ post "/listener" do
 
   status 200
   body all_results.map(&:to_s).join("\n")
-rescue JSON::ParserError
-  status 400
-  body "Invalid JSON payload"
 end

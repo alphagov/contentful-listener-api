@@ -33,7 +33,7 @@ class Result
     new("Updated the live content of #{publishing_api_identifier(content_config)}")
   end
 
-  def self.no_afffected_content
+  def self.no_affected_content
     new("No content updated, there was no configured content affected by the event.")
   end
 
