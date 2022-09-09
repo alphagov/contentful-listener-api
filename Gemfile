@@ -1,8 +1,11 @@
 source "https://rubygems.org"
 
-gem "byebug"
 gem "contentful"
 gem "gds-api-adapters"
-gem "rubocop-govuk", require: false
 gem "sinatra"
 gem "sinatra-contrib"
+
+group :development, :test do
+  gem "byebug"
+  gem "rubocop-govuk", require: false
+end
