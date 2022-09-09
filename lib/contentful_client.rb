@@ -15,6 +15,10 @@ module ContentfulClient
                            space: space_id)
   end
 
+  def self.reset
+    @access_token_config = nil
+  end
+
   def self.draft_access_token(space_id)
     config = access_token_config.find { |c| c["space_id"] == space_id }
 
@@ -22,6 +26,8 @@ module ContentfulClient
 
     config["draft_access_token"]
   end
+
+  private_class_method :draft_access_token
 
   def self.live_access_token(space_id)
     config = access_token_config.find { |c| c["space_id"] == space_id }
@@ -31,6 +37,8 @@ module ContentfulClient
     config["live_access_token"]
   end
 
+  private_class_method :live_access_token
+
   def self.access_token_config
     @access_token_config ||= begin
       contents = File.read("config/access_tokens.yaml.erb")
@@ -38,4 +46,6 @@ module ContentfulClient
       YAML.safe_load(interpolated)
     end
   end
+
+  private_class_method :access_token_config
 end
