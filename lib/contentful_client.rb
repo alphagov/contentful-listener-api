@@ -33,9 +33,9 @@ module ContentfulClient
 
   def self.access_token_config
     @access_token_config ||= begin
-                               contents = File.read("config/access_tokens.yaml.erb")
-                               interpolated = ERB.new(contents).result
-                               YAML.safe_load(interpolated)
-                             end
+      contents = File.read("config/access_tokens.yaml.erb")
+      interpolated = ERB.new(contents).result
+      YAML.safe_load(interpolated)
+    end
   end
 end

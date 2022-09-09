@@ -3,6 +3,7 @@ require "gds-api-adapters"
 module PublishingApi
   class ContentState
     attr_reader :content_id, :locale
+
     CONTENT_NOT_FOUND = Class.new
     COMPARED_ATTRIBUTES = %w[
       base_path
@@ -14,7 +15,7 @@ module PublishingApi
       schema_name
       title
       update_type
-    ]
+    ].freeze
 
     def initialize(content_id, locale = "en")
       @content_id = content_id
@@ -45,7 +46,7 @@ module PublishingApi
 
     def draft_content
       if most_recent_content == CONTENT_NOT_FOUND ||
-        !%w[draft published].include?(most_recent_content["publication_state"])
+          !%w[draft published].include?(most_recent_content["publication_state"])
         CONTENT_NOT_FOUND
       else
         most_recent_content
@@ -58,10 +59,10 @@ module PublishingApi
 
     def most_recent_content
       @most_recent_content ||= begin
-                                 GdsApi.publishing_api.get_content(content_id, locale: locale)
-                               rescue GdsApi::HTTPNotFound
-                                 CONTENT_NOT_FOUND
-                               end
+        GdsApi.publishing_api.get_content(content_id, locale:)
+      rescue GdsApi::HTTPNotFound
+        CONTENT_NOT_FOUND
+      end
     end
 
     def fetch_live_version
@@ -70,7 +71,7 @@ module PublishingApi
 
       published_version_number = most_recent_content["state_history"].key("published")
       if published_version_number
-        GdsApi.publishing_api.get_content(content_id, locale: locale, version: published_version_number)
+        GdsApi.publishing_api.get_content(content_id, locale:, version: published_version_number)
       else
         CONTENT_NOT_FOUND
       end

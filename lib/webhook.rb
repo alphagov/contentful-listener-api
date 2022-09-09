@@ -8,7 +8,7 @@ class Webhook
     @payload = payload
   end
 
-  # Note: It's unclear what we should do if someone archives/unpublishes/deletes the root
+  # NOTE: It's unclear what we should do if someone archives/unpublishes/deletes the root
   # item
   def event_of_interest?
     %w[create save auto_save archive unarchive publish unpublish delete].include?(cms_event)

@@ -7,9 +7,9 @@ class ContentConfig
 
   def self.all
     @all ||= begin
-               data = YAML.load_file("config/content_items.yaml")
-               data.map { |attributes| new(attributes) }
-             end
+      data = YAML.load_file("config/content_items.yaml")
+      data.map { |attributes| new(attributes) }
+    end
   end
 
   attr_reader :contentful_space_id, :contentful_entry_id, :content_id, :publishing_api_attributes

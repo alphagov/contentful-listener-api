@@ -26,7 +26,6 @@ post "/listener" do
 
     next [Result.content_not_configured(content_id, locale)] unless content_config
 
-
     results = []
     results << PublishingApi::Updater.update_live(content_config) if webhook.live_change?
     results << PublishingApi::Updater.update_draft(content_config)

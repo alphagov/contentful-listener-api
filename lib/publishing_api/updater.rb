@@ -23,7 +23,7 @@ module PublishingApi
         lock_version = content_state.lock_version
         entry = contentful_client.entry(content_config.contentful_entry_id, include: 10)
 
-        next Result.no_draft_root_entry(content_config) if !entry
+        next Result.no_draft_root_entry(content_config) unless entry
 
         content_payload = build_content_payload(contentful_client, entry, lock_version)
 
@@ -43,7 +43,7 @@ module PublishingApi
         lock_version = content_state.lock_version
         entry = contentful_client.entry(content_config.contentful_entry_id, include: 10)
 
-        next Result.no_live_root_entry(content_config) if !entry
+        next Result.no_live_root_entry(content_config) unless entry
 
         content_payload = build_content_payload(contentful_client, entry, lock_version)
 
@@ -83,7 +83,6 @@ module PublishingApi
       content_state = ContentState.new(content_config.content_id, content_config.locale)
 
       yield(content_state)
-
     rescue GdsApi::HTTPConflict
       # If two jobs try write to the Publishing API concurrently the first one will
       # win and the second will fail as the version is out of date. If this happens

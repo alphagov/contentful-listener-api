@@ -44,7 +44,8 @@ module PublishingApi
     end
 
     def establish_cms_entity_ids(input, found_entity_ids = [])
-      if input.is_a?(Hash)
+      case input
+      when Hash
         found_entity_ids << input["cms_id"] if input["cms_id"]
 
         input
@@ -52,7 +53,7 @@ module PublishingApi
           .values
           .flat_map { |item| establish_cms_entity_ids(item, found_entity_ids) }
           .uniq
-      elsif input.is_a?(Array)
+      when Array
         input.flat_map { |item| establish_cms_entity_ids(item, found_entity_ids) }.uniq
       else
         found_entity_ids
@@ -102,7 +103,7 @@ module PublishingApi
                           {
                             "content_type" => asset.file.content_type,
                             "details" => asset.file.details,
-                            "url" => asset.url
+                            "url" => asset.url,
                           }
                         else
                           {}
