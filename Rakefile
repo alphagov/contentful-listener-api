@@ -1,8 +1,11 @@
 begin
   require "rubocop/rake_task"
+  require "rspec/core/rake_task"
+
   RuboCop::RakeTask.new
+  RSpec::Core::RakeTask.new(:spec)
 rescue LoadError
-  # Gems will fail to load outside of dev/test environments
+  # These gems will fail to load outside of dev/test environments
 end
 
-task default: %I[rubocop]
+task default: %I[rubocop spec]
