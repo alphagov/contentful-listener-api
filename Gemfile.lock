@@ -17,6 +17,7 @@ GEM
     crack (0.4.5)
       rexml
     diff-lcs (1.5.0)
+    docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     ffi (1.15.5)
@@ -114,6 +115,12 @@ GEM
       rubocop (~> 1.31)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
+    simplecov (0.21.2)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
     sinatra (2.2.1)
       mustermann (~> 1.0)
       rack (~> 2.2)
@@ -149,6 +156,7 @@ DEPENDENCIES
   rake
   rspec
   rubocop-govuk
+  simplecov
   sinatra
   sinatra-contrib
   webmock

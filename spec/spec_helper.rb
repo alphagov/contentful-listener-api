@@ -1,5 +1,8 @@
 ENV["APP_ENV"] = "test"
 
+require "simplecov"
+SimpleCov.start
+
 require_relative "../app"
 require "webmock/rspec"
 require "gds_api/test_helpers/publishing_api"
