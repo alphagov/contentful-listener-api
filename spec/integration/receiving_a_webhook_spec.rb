@@ -38,11 +38,6 @@ RSpec.describe "Receiving a webhook" do
       stub_request(:get, /contentful.com/).to_return(File.open(response_file_path))
     end
 
-    after do
-      ContentConfig.reset
-      ContentfulClient.reset
-    end
-
     it "returns a 200 status when content has been updated" do
       space_id = "space-1"
       entry_id = "entry-1"

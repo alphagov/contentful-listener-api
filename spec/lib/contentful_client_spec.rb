@@ -1,8 +1,6 @@
 RSpec.describe ContentfulClient do
   include StubConfig
 
-  before { described_class.reset }
-
   describe ".live_client" do
     it "returns a Contentful::Client" do
       stub_access_tokens_config(space_id: "test")
