@@ -121,6 +121,7 @@ DEPENDENCIES
   byebug
   contentful
   gds-api-adapters
+  rake
   rubocop-govuk
   sinatra
   sinatra-contrib
