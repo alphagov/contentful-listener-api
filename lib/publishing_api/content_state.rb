@@ -75,6 +75,8 @@ module PublishingApi
       else
         CONTENT_NOT_FOUND
       end
+    rescue GdsApi::HTTPNotFound
+      CONTENT_NOT_FOUND
     end
   end
 end
