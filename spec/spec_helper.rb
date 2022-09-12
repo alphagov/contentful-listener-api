@@ -6,8 +6,14 @@ SimpleCov.start
 require_relative "../app"
 require "webmock/rspec"
 require "gds_api/test_helpers/publishing_api"
+require "vcr"
 
 Dir[File.join(__dir__, "support/**/*.rb")].sort.each { |f| require f }
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
+end
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -33,5 +39,14 @@ RSpec.configure do |config|
   config.before do
     ContentConfig.reset
     ContentfulClient.reset
+  end
+
+  # Turn off VCR by default and only turn it on in specific tests
+  VCR.turn_off!
+
+  config.around(vcr: true) do |example|
+    VCR.turn_on!
+    example.run
+    VCR.turn_off!
   end
 end

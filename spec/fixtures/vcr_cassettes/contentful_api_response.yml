@@ -1,0 +1,1036 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://cdn.contentful.com/spaces/q15b851vpa2y/environments/master/entries?include=10&sys.id=2jtXuXy3sKXOu0ZrAaEzkj
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      X-Contentful-User-Agent:
+      - sdk contentful.rb/2.16.3; platform ruby/3.1.2; os macOS/21;
+      Authorization:
+      - Bearer <ACCESS_TOKEN>
+      Content-Type:
+      - application/vnd.contentful.delivery.v1+json
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - close
+      Host:
+      - cdn.contentful.com
+      User-Agent:
+      - http.rb/4.4.1
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Connection:
+      - close
+      Content-Length:
+      - '26335'
+      Content-Type:
+      - application/vnd.contentful.delivery.v1+json
+      Cf-Environment-Id:
+      - master
+      Cf-Environment-Uuid:
+      - 9607a6e5-e1ad-4e48-8325-0fb7376c5252
+      Cf-Organization-Id:
+      - 4zkEZXCDDVPhngFxj2Px7Z
+      Cf-Space-Id:
+      - q15b851vpa2y
+      Etag:
+      - W/"2631818234068921396"
+      X-Contentful-Route:
+      - "/spaces/:space/environments/:environment/entries"
+      X-Content-Type-Options:
+      - nosniff
+      Contentful-Api:
+      - cda
+      Server:
+      - Contentful
+      X-Contentful-Region:
+      - us-east-1
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Headers:
+      - Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature
+      Access-Control-Expose-Headers:
+      - Etag
+      Access-Control-Max-Age:
+      - '86400'
+      Access-Control-Allow-Methods:
+      - GET,HEAD,OPTIONS
+      Via:
+      - 1.1 varnish, 1.1 varnish
+      Contentful-Cache:
+      - HIT
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Mon, 12 Sep 2022 17:32:24 GMT
+      Age:
+      - '902'
+      X-Served-By:
+      - cache-ewr18148-EWR, cache-lhr7377-LHR
+      X-Cache-Hits:
+      - 1, 1
+      X-Timer:
+      - S1663003945.885696,VS0,VE1
+      X-Cache:
+      - HIT
+      X-Contentful-Request-Id:
+      - 3853178f-e929-4b32-b1d4-287ccd4a00d5
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "sys": {
+            "type": "Array"
+          },
+          "total": 1,
+          "skip": 0,
+          "limit": 100,
+          "items": [
+            {
+              "metadata": {
+                "tags": []
+              },
+              "sys": {
+                "space": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Space",
+                    "id": "q15b851vpa2y"
+                  }
+                },
+                "id": "2jtXuXy3sKXOu0ZrAaEzkj",
+                "type": "Entry",
+                "createdAt": "2022-09-12T11:06:57.024Z",
+                "updatedAt": "2022-09-12T11:06:57.024Z",
+                "environment": {
+                  "sys": {
+                    "id": "master",
+                    "type": "Link",
+                    "linkType": "Environment"
+                  }
+                },
+                "revision": 1,
+                "contentType": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "ContentType",
+                    "id": "allDataTypes"
+                  }
+                },
+                "locale": "en-US"
+              },
+              "fields": {
+                "title": "Testing all data types",
+                "richText": {
+                  "data": {},
+                  "content": [
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "Rich text field with ",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {},
+                          "marks": [
+                            {
+                              "type": "bold"
+                            }
+                          ],
+                          "value": "bold text",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": ", ",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {},
+                          "marks": [
+                            {
+                              "type": "italic"
+                            }
+                          ],
+                          "value": "italic",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": " and ",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {},
+                          "marks": [
+                            {
+                              "type": "underline"
+                            }
+                          ],
+                          "value": "underlined",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "paragraph"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "It has headings",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "heading-1"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "And code",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "paragraph"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [
+                            {
+                              "type": "code"
+                            }
+                          ],
+                          "value": "let x = y",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "paragraph"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "A ",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {
+                            "uri": "https://www.gov.uk"
+                          },
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "link",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "hyperlink"
+                        },
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": ", an ",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {
+                            "target": {
+                              "sys": {
+                                "id": "64EsT2ttgsJMDm6VxnOWtX",
+                                "type": "Link",
+                                "linkType": "Entry"
+                              }
+                            }
+                          },
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "entry link",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "entry-hyperlink"
+                        },
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": " and ",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {
+                            "target": {
+                              "sys": {
+                                "id": "5t3LxKQtV6Uv7dNXawc0xr",
+                                "type": "Link",
+                                "linkType": "Asset"
+                              }
+                            }
+                          },
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "an asset link",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "asset-hyperlink"
+                        },
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "paragraph"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "List item 1",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "paragraph"
+                            }
+                          ],
+                          "nodeType": "list-item"
+                        },
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "List item 2",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "paragraph"
+                            }
+                          ],
+                          "nodeType": "list-item"
+                        },
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "List item 3",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "paragraph"
+                            }
+                          ],
+                          "nodeType": "list-item"
+                        }
+                      ],
+                      "nodeType": "unordered-list"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "More items",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "paragraph"
+                            }
+                          ],
+                          "nodeType": "list-item"
+                        },
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "marks": [],
+                                  "value": "Again",
+                                  "nodeType": "text"
+                                }
+                              ],
+                              "nodeType": "paragraph"
+                            }
+                          ],
+                          "nodeType": "list-item"
+                        }
+                      ],
+                      "nodeType": "ordered-list"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "marks": [],
+                              "value": "A blockquote",
+                              "nodeType": "text"
+                            }
+                          ],
+                          "nodeType": "paragraph"
+                        }
+                      ],
+                      "nodeType": "blockquote"
+                    },
+                    {
+                      "data": {},
+                      "content": [],
+                      "nodeType": "hr"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "paragraph"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "content": [
+                                    {
+                                      "data": {},
+                                      "marks": [],
+                                      "value": "heading 1",
+                                      "nodeType": "text"
+                                    }
+                                  ],
+                                  "nodeType": "paragraph"
+                                }
+                              ],
+                              "nodeType": "table-header-cell"
+                            },
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "content": [
+                                    {
+                                      "data": {},
+                                      "marks": [],
+                                      "value": "heading 2",
+                                      "nodeType": "text"
+                                    }
+                                  ],
+                                  "nodeType": "paragraph"
+                                }
+                              ],
+                              "nodeType": "table-header-cell"
+                            }
+                          ],
+                          "nodeType": "table-row"
+                        },
+                        {
+                          "data": {},
+                          "content": [
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "content": [
+                                    {
+                                      "data": {},
+                                      "marks": [],
+                                      "value": "item 1",
+                                      "nodeType": "text"
+                                    }
+                                  ],
+                                  "nodeType": "paragraph"
+                                }
+                              ],
+                              "nodeType": "table-cell"
+                            },
+                            {
+                              "data": {},
+                              "content": [
+                                {
+                                  "data": {},
+                                  "content": [
+                                    {
+                                      "data": {},
+                                      "marks": [],
+                                      "value": "item 2",
+                                      "nodeType": "text"
+                                    }
+                                  ],
+                                  "nodeType": "paragraph"
+                                }
+                              ],
+                              "nodeType": "table-cell"
+                            }
+                          ],
+                          "nodeType": "table-row"
+                        }
+                      ],
+                      "nodeType": "table"
+                    },
+                    {
+                      "data": {
+                        "target": {
+                          "sys": {
+                            "id": "64EsT2ttgsJMDm6VxnOWtX",
+                            "type": "Link",
+                            "linkType": "Entry"
+                          }
+                        }
+                      },
+                      "content": [],
+                      "nodeType": "embedded-entry-block"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "",
+                          "nodeType": "text"
+                        },
+                        {
+                          "data": {
+                            "target": {
+                              "sys": {
+                                "id": "7aBwQ5tQno040td6fx8qxE",
+                                "type": "Link",
+                                "linkType": "Entry"
+                              }
+                            }
+                          },
+                          "content": [],
+                          "nodeType": "embedded-entry-inline"
+                        },
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "paragraph"
+                    },
+                    {
+                      "data": {
+                        "target": {
+                          "sys": {
+                            "id": "5t3LxKQtV6Uv7dNXawc0xr",
+                            "type": "Link",
+                            "linkType": "Asset"
+                          }
+                        }
+                      },
+                      "content": [],
+                      "nodeType": "embedded-asset-block"
+                    },
+                    {
+                      "data": {},
+                      "content": [
+                        {
+                          "data": {},
+                          "marks": [],
+                          "value": "",
+                          "nodeType": "text"
+                        }
+                      ],
+                      "nodeType": "paragraph"
+                    }
+                  ],
+                  "nodeType": "document"
+                },
+                "longText": "## Markdown\n\nThis is an example of markdown\n\n![Ukraine promo image](//images.ctfassets.net/q15b851vpa2y/5t3LxKQtV6Uv7dNXawc0xr/0bbe729680be6c58ef7391a34c257dbf/ukraine-promo-b430a267e456f07449a522fbdd20edb500aa235d9ada798a4dbb1b0a03d7b203.jpeg)",
+                "textList": [
+                  "Item 1",
+                  "Item 2",
+                  "Item 3",
+                  "Item 4"
+                ],
+                "integer": 100,
+                "decimal": 100,
+                "date": "2022-09-14",
+                "datetime": "2022-09-19T00:00+01:00",
+                "location": {
+                  "lon": -0.12400186000000701,
+                  "lat": 51.49078682979648
+                },
+                "media": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Asset",
+                    "id": "5t3LxKQtV6Uv7dNXawc0xr"
+                  }
+                },
+                "mediaList": [
+                  {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Asset",
+                      "id": "5t3LxKQtV6Uv7dNXawc0xr"
+                    }
+                  }
+                ],
+                "boolean": true,
+                "json": {
+                  "test": true
+                },
+                "reference": {
+                  "sys": {
+                    "type": "Link",
+                    "linkType": "Entry",
+                    "id": "64EsT2ttgsJMDm6VxnOWtX"
+                  }
+                },
+                "referenceMultiple": [
+                  {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Entry",
+                      "id": "1nMBV6lN6G2xuMJCnHIj2i"
+                    }
+                  },
+                  {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Entry",
+                      "id": "6E3e6ZaAL7D8bKGqninAXS"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "errors": [
+            {
+              "sys": {
+                "id": "notResolvable",
+                "type": "error"
+              },
+              "details": {
+                "type": "Link",
+                "linkType": "Entry",
+                "id": "6E3e6ZaAL7D8bKGqninAXS"
+              }
+            }
+          ],
+          "includes": {
+            "Entry": [
+              {
+                "metadata": {
+                  "tags": []
+                },
+                "sys": {
+                  "space": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Space",
+                      "id": "q15b851vpa2y"
+                    }
+                  },
+                  "id": "1nMBV6lN6G2xuMJCnHIj2i",
+                  "type": "Entry",
+                  "createdAt": "2022-06-01T14:14:16.142Z",
+                  "updatedAt": "2022-07-20T16:33:48.043Z",
+                  "environment": {
+                    "sys": {
+                      "id": "master",
+                      "type": "Link",
+                      "linkType": "Environment"
+                    }
+                  },
+                  "revision": 2,
+                  "contentType": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "ContentType",
+                      "id": "homepageFeaturedLink"
+                    }
+                  },
+                  "locale": "en-US"
+                },
+                "fields": {
+                  "image": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Asset",
+                      "id": "5t3LxKQtV6Uv7dNXawc0xr"
+                    }
+                  },
+                  "accessibilityConfirmation": false,
+                  "headingLink": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Entry",
+                      "id": "7aBwQ5tQno040td6fx8qxE"
+                    }
+                  },
+                  "description": "Find out about the UK's response to the Russian government's invasion of Ukraine and how you can help."
+                }
+              },
+              {
+                "metadata": {
+                  "tags": []
+                },
+                "sys": {
+                  "space": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Space",
+                      "id": "q15b851vpa2y"
+                    }
+                  },
+                  "id": "2MImUYxGIy4Dw7GeU3m87X",
+                  "type": "Entry",
+                  "createdAt": "2022-09-02T13:09:58.019Z",
+                  "updatedAt": "2022-09-02T13:09:58.019Z",
+                  "environment": {
+                    "sys": {
+                      "id": "master",
+                      "type": "Link",
+                      "linkType": "Environment"
+                    }
+                  },
+                  "revision": 1,
+                  "contentType": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "ContentType",
+                      "id": "link"
+                    }
+                  },
+                  "locale": "en-US"
+                },
+                "fields": {
+                  "text": "Test content",
+                  "target": "https://www.gov.uk/"
+                }
+              },
+              {
+                "metadata": {
+                  "tags": []
+                },
+                "sys": {
+                  "space": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Space",
+                      "id": "q15b851vpa2y"
+                    }
+                  },
+                  "id": "5fwl9vPyr8sWksa4CCdIHh",
+                  "type": "Entry",
+                  "createdAt": "2022-07-07T12:00:54.295Z",
+                  "updatedAt": "2022-08-16T10:48:49.629Z",
+                  "environment": {
+                    "sys": {
+                      "id": "master",
+                      "type": "Link",
+                      "linkType": "Environment"
+                    }
+                  },
+                  "revision": 7,
+                  "contentType": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "ContentType",
+                      "id": "link"
+                    }
+                  },
+                  "locale": "en-US"
+                },
+                "fields": {
+                  "text": "HMRC services: sign in",
+                  "target": "https://www.gov.uk/log-in-register-hmrc-online-services"
+                }
+              },
+              {
+                "metadata": {
+                  "tags": []
+                },
+                "sys": {
+                  "space": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Space",
+                      "id": "q15b851vpa2y"
+                    }
+                  },
+                  "id": "64EsT2ttgsJMDm6VxnOWtX",
+                  "type": "Entry",
+                  "createdAt": "2022-07-07T12:01:32.441Z",
+                  "updatedAt": "2022-09-02T13:09:24.519Z",
+                  "environment": {
+                    "sys": {
+                      "id": "master",
+                      "type": "Link",
+                      "linkType": "Environment"
+                    }
+                  },
+                  "revision": 25,
+                  "contentType": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "ContentType",
+                      "id": "govUkHomepage"
+                    }
+                  },
+                  "locale": "en-US"
+                },
+                "fields": {
+                  "headerTitle": "Welcome to GOV.UK",
+                  "headerIntro": "The only place to find government services and information",
+                  "popularOnGovUkHeading": "Popular on GOV.UK",
+                  "searchHeading": "Search",
+                  "topicsHeading": "Topics",
+                  "governmentActivityHeading": "Government Activity",
+                  "governmentActivityTagLine": "Find out what the government is doing",
+                  "departmentsAndOrganisationsHeading": "Departments and Organisations",
+                  "ministerialDepartmentsCount": 23,
+                  "otherAgenciesCount": 400,
+                  "featuredHeading": "Featured",
+                  "featuredLinks": [
+                    {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "id": "1nMBV6lN6G2xuMJCnHIj2i"
+                      }
+                    },
+                    {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "id": "1nMBV6lN6G2xuMJCnHIj2i"
+                      }
+                    },
+                    {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "id": "1nMBV6lN6G2xuMJCnHIj2i"
+                      }
+                    }
+                  ],
+                  "moreOnGovUkHeading": "More on GOV.UK",
+                  "moreOnGovUkLinks": [
+                    {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "id": "5fwl9vPyr8sWksa4CCdIHh"
+                      }
+                    },
+                    {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "id": "7jOm71PUcDDVnl8zhVdQAS"
+                      }
+                    },
+                    {
+                      "sys": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "id": "2MImUYxGIy4Dw7GeU3m87X"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "metadata": {
+                  "tags": []
+                },
+                "sys": {
+                  "space": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Space",
+                      "id": "q15b851vpa2y"
+                    }
+                  },
+                  "id": "7aBwQ5tQno040td6fx8qxE",
+                  "type": "Entry",
+                  "createdAt": "2022-06-01T14:13:53.386Z",
+                  "updatedAt": "2022-06-01T14:13:53.386Z",
+                  "environment": {
+                    "sys": {
+                      "id": "master",
+                      "type": "Link",
+                      "linkType": "Environment"
+                    }
+                  },
+                  "revision": 1,
+                  "contentType": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "ContentType",
+                      "id": "link"
+                    }
+                  },
+                  "locale": "en-US"
+                },
+                "fields": {
+                  "text": "War in Ukraine",
+                  "target": "https://ukstandswithukraine.campaign.gov.uk/"
+                }
+              },
+              {
+                "metadata": {
+                  "tags": []
+                },
+                "sys": {
+                  "space": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Space",
+                      "id": "q15b851vpa2y"
+                    }
+                  },
+                  "id": "7jOm71PUcDDVnl8zhVdQAS",
+                  "type": "Entry",
+                  "createdAt": "2022-08-25T14:07:41.353Z",
+                  "updatedAt": "2022-08-31T19:11:28.506Z",
+                  "environment": {
+                    "sys": {
+                      "id": "master",
+                      "type": "Link",
+                      "linkType": "Environment"
+                    }
+                  },
+                  "revision": 2,
+                  "contentType": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "ContentType",
+                      "id": "link"
+                    }
+                  },
+                  "locale": "en-US"
+                },
+                "fields": {
+                  "text": "All VAT Rates (test)",
+                  "target": "https://www.gov.uk/vat-rates"
+                }
+              }
+            ],
+            "Asset": [
+              {
+                "metadata": {
+                  "tags": []
+                },
+                "sys": {
+                  "space": {
+                    "sys": {
+                      "type": "Link",
+                      "linkType": "Space",
+                      "id": "q15b851vpa2y"
+                    }
+                  },
+                  "id": "5t3LxKQtV6Uv7dNXawc0xr",
+                  "type": "Asset",
+                  "createdAt": "2022-06-01T14:12:52.606Z",
+                  "updatedAt": "2022-06-01T14:12:52.606Z",
+                  "environment": {
+                    "sys": {
+                      "id": "master",
+                      "type": "Link",
+                      "linkType": "Environment"
+                    }
+                  },
+                  "revision": 1,
+                  "locale": "en-US"
+                },
+                "fields": {
+                  "title": "Ukraine promo image",
+                  "description": "",
+                  "file": {
+                    "url": "//images.ctfassets.net/q15b851vpa2y/5t3LxKQtV6Uv7dNXawc0xr/0bbe729680be6c58ef7391a34c257dbf/ukraine-promo-b430a267e456f07449a522fbdd20edb500aa235d9ada798a4dbb1b0a03d7b203.jpeg",
+                    "details": {
+                      "size": 21653,
+                      "image": {
+                        "width": 610,
+                        "height": 407
+                      }
+                    },
+                    "fileName": "ukraine-promo-b430a267e456f07449a522fbdd20edb500aa235d9ada798a4dbb1b0a03d7b203.jpeg",
+                    "contentType": "image/jpeg"
+                  }
+                }
+              }
+            ]
+          }
+        }
+    adapter_metadata:
+      vcr_decompressed: gzip
+  recorded_at: Mon, 12 Sep 2022 17:32:24 GMT
+recorded_with: VCR 6.1.0

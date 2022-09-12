@@ -33,12 +33,7 @@ RSpec.describe "Receiving a webhook" do
       }
     end
 
-    def stub_contentful
-      response_file_path = File.join(__dir__, "../fixtures/contentful_http_response.txt")
-      stub_request(:get, /contentful.com/).to_return(File.open(response_file_path))
-    end
-
-    it "returns a 200 status when content has been updated" do
+    it "returns a 200 status when content has been updated", vcr: true do
       space_id = "space-1"
       entry_id = "entry-1"
       content_id = SecureRandom.uuid
@@ -56,13 +51,14 @@ RSpec.describe "Receiving a webhook" do
         },
       )
       stub_publishing_api_does_not_have_item(content_id, { locale: })
-      stub_contentful
       stub_any_publishing_api_put_content.to_return(body: { lock_version: 1 }.to_json)
       stub_any_publishing_api_publish
 
-      post "/listener",
-           webhook_payload(space_id:, entry_id:).to_json,
-           "HTTP_X_CONTENTFUL_TOPIC" => "ContentManagement.Entry.publish"
+      vcr_contentful_api_response do
+        post "/listener",
+             webhook_payload(space_id:, entry_id:).to_json,
+             "HTTP_X_CONTENTFUL_TOPIC" => "ContentManagement.Entry.publish"
+      end
 
       expect(last_response.status).to eq(200)
       expect(last_response.body)
