@@ -33,6 +33,17 @@ RSpec.describe "Receiving a webhook" do
       }
     end
 
+    def stub_publishing_api_editions_for_cms_entity_ids(content_id:, locale:, space_id:, entry_id:)
+      stub_publishing_api_get_editions(
+        [{ "content_id" => content_id, "locale" => locale }],
+        {
+          cms_entity_ids: ["#{space_id}:Entry:#{entry_id}"],
+          fields: %w[content_id locale],
+          states: %w[draft published],
+        },
+      )
+    end
+
     it "returns a 200 status when content has been updated", vcr: true do
       space_id = "space-1"
       entry_id = "entry-1"
@@ -42,14 +53,7 @@ RSpec.describe "Receiving a webhook" do
       stub_content_items_config(space_id:, entry_id:, content_id:, locale:)
       stub_access_tokens_config(space_id:)
 
-      stub_publishing_api_get_editions(
-        [{ "content_id" => content_id, "locale" => locale }],
-        {
-          cms_entity_ids: ["#{space_id}:Entry:#{entry_id}"],
-          fields: %w[content_id locale],
-          states: %w[draft published],
-        },
-      )
+      stub_publishing_api_editions_for_cms_entity_ids(content_id:, locale:, space_id:, entry_id:)
       stub_publishing_api_does_not_have_item(content_id, { locale: })
       stub_any_publishing_api_put_content.to_return(body: { lock_version: 1 }.to_json)
       stub_any_publishing_api_publish
@@ -64,6 +68,30 @@ RSpec.describe "Receiving a webhook" do
       expect(last_response.body)
         .to eq("Updated the live content of #{content_id}:#{locale}\n" \
                "Updated the draft content of #{content_id}:#{locale}")
+    end
+
+    it "returns a 200 status when only draft is updated due to a draft Contentful change", vcr: true do
+      space_id = "space-1"
+      entry_id = "entry-1"
+      content_id = SecureRandom.uuid
+      locale = "en"
+
+      stub_content_items_config(space_id:, entry_id:, content_id:, locale:)
+      stub_access_tokens_config(space_id:)
+
+      stub_publishing_api_editions_for_cms_entity_ids(content_id:, locale:, space_id:, entry_id:)
+      stub_publishing_api_does_not_have_item(content_id, { locale: })
+      stub_any_publishing_api_put_content.to_return(body: { lock_version: 1 }.to_json)
+
+      vcr_contentful_api_response do
+        post "/listener",
+             webhook_payload(space_id:, entry_id:).to_json,
+             "HTTP_X_CONTENTFUL_TOPIC" => "ContentManagement.Entry.auto_save"
+      end
+
+      expect(last_response.status).to eq(200)
+      expect(last_response.body)
+        .to eq("Updated the draft content of #{content_id}:#{locale}")
     end
 
     it "returns a 200 status when trying to update content that isn't configured in this repo" do
