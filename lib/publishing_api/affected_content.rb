@@ -1,9 +1,6 @@
 require "gds-api-adapters"
 require "content_config"
 
-# A class that is used to communicate with the Publishing API to identify
-# whether there are content items that need to be updated as a result of the
-# contentful change
 module PublishingApi
   class AffectedContent
     attr_reader :entity_id
@@ -16,9 +13,6 @@ module PublishingApi
       new(...).call
     end
 
-    # Fetches content_id/locale pairs from Publishing API for content affected by change
-    # also checks our contentful config in case it's a page that hasn't yet been
-    # persisted onto Publishing API.
     def call
       (publishing_api_editions + configured_content).uniq
     end

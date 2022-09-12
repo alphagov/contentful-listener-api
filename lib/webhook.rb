@@ -1,5 +1,3 @@
-# A class to make it abstract the questions we want to ask of a Contentful
-# Webhook payload
 class Webhook
   attr_reader :topic, :payload
 
@@ -8,8 +6,6 @@ class Webhook
     @payload = payload
   end
 
-  # NOTE: It's unclear what we should do if someone archives/unpublishes/deletes the root
-  # item
   def event_of_interest?
     %w[create save auto_save archive unarchive publish unpublish delete].include?(cms_event)
   end
@@ -24,8 +20,6 @@ class Webhook
     "#{space_id}:#{type}:#{entity_id}"
   end
 
-  # Work out whether this change represents a change to the live version
-  # as many will only affect the draft
   def live_change?
     %w[archive unarchive publish unpublish delete].include?(cms_event)
   end
