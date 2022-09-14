@@ -43,20 +43,20 @@ module PublishingApi
       [{ "path" => base_path, "type" => "exact" }]
     end
 
-    def establish_cms_entity_ids(input, found_entity_ids = [])
+    def establish_cms_entity_ids(input)
       case input
       when Hash
-        found_entity_ids << input["cms_id"] if input["cms_id"]
+        found_entity_ids = [input["cms_id"]].compact
 
-        input
-          .except(*%w[cms_id])
-          .values
-          .flat_map { |item| establish_cms_entity_ids(item, found_entity_ids) }
-          .uniq
+        recursive_entity_ids = input.except(*%w[cms_id])
+                                    .values
+                                    .flat_map { |item| establish_cms_entity_ids(item) }
+
+        (found_entity_ids + recursive_entity_ids).uniq
       when Array
-        input.flat_map { |item| establish_cms_entity_ids(item, found_entity_ids) }.uniq
+        input.flat_map { |item| establish_cms_entity_ids(item) }.uniq
       else
-        found_entity_ids
+        []
       end
     end
 
@@ -69,7 +69,7 @@ module PublishingApi
       when Array
         item.map { |i| build_details(i, entry_ids) }
       when Hash
-        item.transform_values { |i| build_details(i, entry_ids) }
+        item.transform_keys(&:to_s).transform_values { |i| build_details(i, entry_ids) }
       when Contentful::Entry
         entry_details(item, entry_ids)
       when Contentful::Link
