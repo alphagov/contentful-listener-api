@@ -37,6 +37,20 @@ task :sync_content_item, :content_id, :locale do |_, args|
   puts draft_result.to_s
 end
 
+desc "Unpublish content from Publishing API"
+task :unpublish_content_item, :content_id, :locale do |_, args|
+  args.with_defaults(locale: "en")
+  type = ENV.fetch("TYPE", "gone")
+
+  GdsApi.publishing_api.unpublish(args[:content_id],
+                                  locale: args[:locale],
+                                  type:,
+                                  explanation: ENV["EXPLANATION"],
+                                  alternative_path: ENV["URL"])
+
+  puts "Unpublished #{args[:content_id]}:#{args[:locale]} from GOV.UK with a type of #{type}"
+end
+
 namespace :vcr do
   desc "Generate a new cassette to mock Contentful API responses for tests"
   task :record_contentful_api_response do

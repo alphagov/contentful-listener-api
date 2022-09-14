@@ -1,4 +1,6 @@
 RSpec.describe "Rake tasks" do
+  include GdsApi::TestHelpers::PublishingApi
+
   describe "sync_content_item" do
     let(:content_config) { instance_double("ContentConfig") }
 
@@ -77,6 +79,76 @@ RSpec.describe "Rake tasks" do
           .to output("A base_path isn't configured for #{content_id}:#{locale}\n").to_stderr
           .and raise_error(SystemExit)
       end
+    end
+  end
+
+  describe "unpublish_content_item" do
+    before do
+      Rake::Task["unpublish_content_item"].reenable
+    end
+
+    it "unpublishes content from GOV.UK defaulting to a type of gone" do
+      content_id = SecureRandom.uuid
+      locale = "en"
+
+      unpublish_request = stub_publishing_api_unpublish(
+        content_id,
+        { body: { type: "gone", locale: } },
+      )
+
+      expect { Rake::Task["unpublish_content_item"].invoke(content_id, locale) }
+        .to output("Unpublished #{content_id}:#{locale} from GOV.UK with a type of gone\n").to_stdout
+
+      expect(unpublish_request).to have_been_made
+    end
+
+    it "defaults to a locale of 'en'" do
+      content_id = SecureRandom.uuid
+
+      unpublish_request = stub_publishing_api_unpublish(
+        content_id,
+        { body: { type: "gone", locale: "en" } },
+      )
+
+      expect { Rake::Task["unpublish_content_item"].invoke(content_id) }
+        .to output.to_stdout
+
+      expect(unpublish_request).to have_been_made
+    end
+
+    it "can be configured to for a redirect" do
+      content_id = SecureRandom.uuid
+      locale = "en"
+
+      unpublish_request = stub_publishing_api_unpublish(
+        content_id,
+        { body: { type: "redirect", alternative_path: "/other", locale: } },
+      )
+
+      ClimateControl.modify(TYPE: "redirect", URL: "/other") do
+        expect { Rake::Task["unpublish_content_item"].invoke(content_id, locale) }
+          .to output.to_stdout
+      end
+
+      expect(unpublish_request).to have_been_made
+    end
+
+    it "can accept an explanation" do
+      content_id = SecureRandom.uuid
+      locale = "en"
+      explanation = "This is why this page is gone"
+
+      unpublish_request = stub_publishing_api_unpublish(
+        content_id,
+        { body: { type: "gone", explanation:, locale: } },
+      )
+
+      ClimateControl.modify(EXPLANATION: explanation) do
+        expect { Rake::Task["unpublish_content_item"].invoke(content_id, locale) }
+          .to output.to_stdout
+      end
+
+      expect(unpublish_request).to have_been_made
     end
   end
 end
