@@ -7,11 +7,11 @@ module StubConfig
     YAML
   end
 
-  def stub_content_items_config(space_id:, entry_id:, content_id:, locale:)
+  def stub_content_items_config(space_id:, entry_id:, content_id:, locale: "en")
     config = { "contentful_space_id" => space_id,
                "contentful_entry_id" => entry_id,
                "content_id" => content_id,
-               "locale" => locale }
+               "publishing_api_attributes" => { "locale" => locale } }
 
     allow(YAML).to receive(:load_file).and_call_original
     allow(YAML).to receive(:load_file).with("config/content_items.yaml").and_return([config])
