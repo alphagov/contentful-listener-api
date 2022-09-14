@@ -24,6 +24,11 @@ class Result
     new("Updated the draft content of #{publishing_api_identifier(content_config)}")
   end
 
+  def self.live_skipped_draft_only(content_config)
+    new("Did not update the live content of #{publishing_api_identifier(content_config)} " \
+        "as the configured item is set to draft only.")
+  end
+
   def self.live_unchanged(content_config)
     new("Did not update the live content of #{publishing_api_identifier(content_config)} " \
         "as the Publishing API is already up-to-date.")

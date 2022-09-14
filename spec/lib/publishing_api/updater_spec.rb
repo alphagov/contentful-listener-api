@@ -76,6 +76,17 @@ RSpec.describe PublishingApi::Updater do
   end
 
   describe ".update_live" do
+    it "returns a live skipped draft only result if the live entry is configured as draft only" do
+      content_config = ContentConfig.new({ "contentful_space_id" => "space-1",
+                                           "contentful_entry_id" => "entry-1",
+                                           "content_id" => content_id,
+                                           "draft_only" => true })
+
+      result = described_class.update_live(content_config)
+
+      expect(result).to eq(Result.live_skipped_draft_only(content_config))
+    end
+
     it "returns a no live root entry result if the live entry is not found in Contentful" do
       allow(contentful_client).to receive(:entry).and_return(nil)
 

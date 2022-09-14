@@ -16,12 +16,13 @@ class ContentConfig
     @all = nil
   end
 
-  attr_reader :contentful_space_id, :contentful_entry_id, :content_id, :publishing_api_attributes
+  attr_reader :contentful_space_id, :contentful_entry_id, :content_id, :draft_only, :publishing_api_attributes
 
   def initialize(attributes)
     @contentful_space_id = attributes.fetch("contentful_space_id")
     @contentful_entry_id = attributes.fetch("contentful_entry_id")
     @content_id = attributes.fetch("content_id")
+    @draft_only = attributes.fetch("draft_only", false)
     @publishing_api_attributes = attributes.fetch("publishing_api_attributes", {})
   end
 
@@ -31,5 +32,9 @@ class ContentConfig
 
   def base_path
     publishing_api_attributes["base_path"]
+  end
+
+  def draft_only?
+    !!draft_only
   end
 end

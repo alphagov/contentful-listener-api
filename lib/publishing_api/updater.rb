@@ -37,6 +37,8 @@ module PublishingApi
     end
 
     def update_live
+      return Result.live_skipped_draft_only(content_config) if content_config.draft_only?
+
       contentful_client = ContentfulClient.live_client(content_config.contentful_space_id)
 
       retry_conflicts do |content_state|
