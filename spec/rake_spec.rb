@@ -48,33 +48,33 @@ RSpec.describe "Rake tasks" do
     end
 
     it "reserves a path if RESERVE_PATH is set" do
+      content_id = SecureRandom.uuid
+      locale = "en"
+      base_path = "/test"
+      allow(PublishingApi::Updater).to receive(:update_live)
+      allow(PublishingApi::Updater).to receive(:update_draft)
+      allow(content_config).to receive(:base_path).and_return(base_path)
+
+      put_path_endpoint = "#{GdsApi::TestHelpers::PublishingApi::PUBLISHING_API_ENDPOINT}/paths"
+      put_path_request = stub_request(:put, "#{put_path_endpoint}#{base_path}")
+        .with(body: { publishing_app: "contentful-listener" }.to_json)
+
       ClimateControl.modify(RESERVE_PATH: "true") do
-        content_id = SecureRandom.uuid
-        locale = "en"
-        base_path = "/test"
-        allow(PublishingApi::Updater).to receive(:update_live)
-        allow(PublishingApi::Updater).to receive(:update_draft)
-        allow(content_config).to receive(:base_path).and_return(base_path)
-
-        put_path_endpoint = "#{GdsApi::TestHelpers::PublishingApi::PUBLISHING_API_ENDPOINT}/paths"
-        put_path_request = stub_request(:put, "#{put_path_endpoint}#{base_path}")
-          .with(body: { publishing_app: "contentful-listener" }.to_json)
-
         expect { Rake::Task["sync_content_item"].invoke(content_id, locale) }
           .to output(/Reserved #{base_path} for #{content_id}:#{locale}/).to_stdout
-
-        expect(put_path_request).to have_been_requested
       end
+
+      expect(put_path_request).to have_been_made
     end
 
     it "aborts if RESERVE_PATH is set but the content doesn't have a base_path" do
-      ClimateControl.modify(RESERVE_PATH: "true") do
-        content_id = SecureRandom.uuid
-        locale = "en"
-        allow(PublishingApi::Updater).to receive(:update_live)
-        allow(PublishingApi::Updater).to receive(:update_draft)
-        allow(content_config).to receive(:base_path).and_return(nil)
+      content_id = SecureRandom.uuid
+      locale = "en"
+      allow(PublishingApi::Updater).to receive(:update_live)
+      allow(PublishingApi::Updater).to receive(:update_draft)
+      allow(content_config).to receive(:base_path).and_return(nil)
 
+      ClimateControl.modify(RESERVE_PATH: "true") do
         expect { Rake::Task["sync_content_item"].invoke(content_id, locale) }
           .to output("A base_path isn't configured for #{content_id}:#{locale}\n").to_stderr
           .and raise_error(SystemExit)
