@@ -8,6 +8,7 @@ gem "sinatra-contrib"
 
 group :development, :test do
   gem "byebug"
+  gem "climate_control"
   gem "rack-test"
   gem "rspec"
   gem "rubocop-govuk", require: false

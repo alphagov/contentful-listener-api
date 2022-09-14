@@ -4,8 +4,9 @@ require "simplecov"
 SimpleCov.start
 
 require_relative "../app"
-require "webmock/rspec"
+require "climate_control"
 require "gds_api/test_helpers/publishing_api"
+require "webmock/rspec"
 require "vcr"
 
 Dir[File.join(__dir__, "support/**/*.rb")].sort.each { |f| require f }
