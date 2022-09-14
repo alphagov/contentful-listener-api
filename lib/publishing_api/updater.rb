@@ -67,10 +67,6 @@ module PublishingApi
 
     attr_reader :content_config
 
-    def content_state
-      @content_state ||= ContentState.new(content_config.content_id, content_config.locale)
-    end
-
     def build_content_payload(contentful_client, contentful_entry, lock_version)
       attributes = content_config.publishing_api_attributes
                                  .merge(previous_version: lock_version.to_s)
@@ -86,8 +82,8 @@ module PublishingApi
     rescue GdsApi::HTTPConflict
       # If two jobs try write to the Publishing API concurrently the first one will
       # win and the second will fail as the version is out of date. If this happens
-      # we'll retry 3 times.
-      (retries += 1) <= 3 ? retry : raise
+      # we'll retry a further 2 times.
+      (retries += 1) <= 2 ? retry : raise
     end
   end
 end

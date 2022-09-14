@@ -54,4 +54,8 @@ class Result
   def to_s
     message
   end
+
+  def ==(other)
+    other.message == message
+  end
 end
