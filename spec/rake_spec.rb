@@ -1,12 +1,12 @@
 RSpec.describe "Rake tasks" do
   include GdsApi::TestHelpers::PublishingApi
 
-  describe "sync_content_item" do
+  describe "content_item:sync" do
     let(:content_config) { instance_double("ContentConfig") }
 
     before do
       allow(ContentConfig).to receive(:find).and_return(content_config)
-      Rake::Task["sync_content_item"].reenable
+      Rake::Task["content_item:sync"].reenable
     end
 
     it "updates draft and live content" do
@@ -18,7 +18,7 @@ RSpec.describe "Rake tasks" do
       allow(PublishingApi::Updater).to receive(:update_live).and_return(live_result)
       allow(PublishingApi::Updater).to receive(:update_draft).and_return(draft_result)
 
-      expect { Rake::Task["sync_content_item"].invoke(content_id, locale) }
+      expect { Rake::Task["content_item:sync"].invoke(content_id, locale) }
         .to output("live update\ndraft update\n").to_stdout
 
       expect(ContentConfig).to have_received(:find).with(content_id, locale)
@@ -31,7 +31,7 @@ RSpec.describe "Rake tasks" do
       allow(PublishingApi::Updater).to receive(:update_live)
       allow(PublishingApi::Updater).to receive(:update_draft)
 
-      expect { Rake::Task["sync_content_item"].invoke(content_id) }
+      expect { Rake::Task["content_item:sync"].invoke(content_id) }
         .to output.to_stdout
 
       expect(ContentConfig).to have_received(:find).with(content_id, "en")
@@ -42,7 +42,7 @@ RSpec.describe "Rake tasks" do
       locale = "en"
       allow(ContentConfig).to receive(:find).and_return(nil)
 
-      expect { Rake::Task["sync_content_item"].invoke(content_id, locale) }
+      expect { Rake::Task["content_item:sync"].invoke(content_id, locale) }
         .to output("A content item is not configured for #{content_id}:#{locale}\n").to_stderr
         .and raise_error(SystemExit)
     end
@@ -60,7 +60,7 @@ RSpec.describe "Rake tasks" do
         .with(body: { publishing_app: "contentful-listener" }.to_json)
 
       ClimateControl.modify(RESERVE_PATH: "true") do
-        expect { Rake::Task["sync_content_item"].invoke(content_id, locale) }
+        expect { Rake::Task["content_item:sync"].invoke(content_id, locale) }
           .to output(/Reserved #{base_path} for #{content_id}:#{locale}/).to_stdout
       end
 
@@ -75,16 +75,16 @@ RSpec.describe "Rake tasks" do
       allow(content_config).to receive(:base_path).and_return(nil)
 
       ClimateControl.modify(RESERVE_PATH: "true") do
-        expect { Rake::Task["sync_content_item"].invoke(content_id, locale) }
+        expect { Rake::Task["content_item:sync"].invoke(content_id, locale) }
           .to output("A base_path isn't configured for #{content_id}:#{locale}\n").to_stderr
           .and raise_error(SystemExit)
       end
     end
   end
 
-  describe "unpublish_content_item" do
+  describe "content_item:unpublish" do
     before do
-      Rake::Task["unpublish_content_item"].reenable
+      Rake::Task["content_item:unpublish"].reenable
     end
 
     it "unpublishes content from GOV.UK defaulting to a type of gone" do
@@ -96,7 +96,7 @@ RSpec.describe "Rake tasks" do
         { body: { type: "gone", locale: } },
       )
 
-      expect { Rake::Task["unpublish_content_item"].invoke(content_id, locale) }
+      expect { Rake::Task["content_item:unpublish"].invoke(content_id, locale) }
         .to output("Unpublished #{content_id}:#{locale} from GOV.UK with a type of gone\n").to_stdout
 
       expect(unpublish_request).to have_been_made
@@ -110,7 +110,7 @@ RSpec.describe "Rake tasks" do
         { body: { type: "gone", locale: "en" } },
       )
 
-      expect { Rake::Task["unpublish_content_item"].invoke(content_id) }
+      expect { Rake::Task["content_item:unpublish"].invoke(content_id) }
         .to output.to_stdout
 
       expect(unpublish_request).to have_been_made
@@ -126,7 +126,7 @@ RSpec.describe "Rake tasks" do
       )
 
       ClimateControl.modify(TYPE: "redirect", URL: "/other") do
-        expect { Rake::Task["unpublish_content_item"].invoke(content_id, locale) }
+        expect { Rake::Task["content_item:unpublish"].invoke(content_id, locale) }
           .to output.to_stdout
       end
 
@@ -144,7 +144,7 @@ RSpec.describe "Rake tasks" do
       )
 
       ClimateControl.modify(EXPLANATION: explanation) do
-        expect { Rake::Task["unpublish_content_item"].invoke(content_id, locale) }
+        expect { Rake::Task["content_item:unpublish"].invoke(content_id, locale) }
           .to output.to_stdout
       end
 

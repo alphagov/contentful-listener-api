@@ -11,44 +11,46 @@ end
 
 require_relative "app"
 
-desc "Sync a content item with the Publishing API"
-task :sync_content_item, :content_id, :locale do |_, args|
-  args.with_defaults(locale: "en")
+namespace :content_item do
+  desc "Sync a content item with the Publishing API"
+  task :sync, :content_id, :locale do |_, args|
+    args.with_defaults(locale: "en")
 
-  content_config = ContentConfig.find(args[:content_id], args[:locale])
+    content_config = ContentConfig.find(args[:content_id], args[:locale])
 
-  abort "A content item is not configured for #{args[:content_id]}:#{args[:locale]}" unless content_config
+    abort "A content item is not configured for #{args[:content_id]}:#{args[:locale]}" unless content_config
 
-  if ENV["RESERVE_PATH"]
-    if content_config.base_path
-      GdsApi.publishing_api.put_path(
-        content_config.base_path,
-        { publishing_app: PublishingApi::PUBLISHING_APP_NAME },
-      )
-      puts "Reserved #{content_config.base_path} for #{args[:content_id]}:#{args[:locale]}"
-    else
-      abort "A base_path isn't configured for #{args[:content_id]}:#{args[:locale]}"
+    if ENV["RESERVE_PATH"]
+      if content_config.base_path
+        GdsApi.publishing_api.put_path(
+          content_config.base_path,
+          { publishing_app: PublishingApi::PUBLISHING_APP_NAME },
+        )
+        puts "Reserved #{content_config.base_path} for #{args[:content_id]}:#{args[:locale]}"
+      else
+        abort "A base_path isn't configured for #{args[:content_id]}:#{args[:locale]}"
+      end
     end
+
+    live_result = PublishingApi::Updater.update_live(content_config)
+    puts live_result.to_s
+    draft_result = PublishingApi::Updater.update_draft(content_config)
+    puts draft_result.to_s
   end
 
-  live_result = PublishingApi::Updater.update_live(content_config)
-  puts live_result.to_s
-  draft_result = PublishingApi::Updater.update_draft(content_config)
-  puts draft_result.to_s
-end
+  desc "Unpublish content from Publishing API"
+  task :unpublish, :content_id, :locale do |_, args|
+    args.with_defaults(locale: "en")
+    type = ENV.fetch("TYPE", "gone")
 
-desc "Unpublish content from Publishing API"
-task :unpublish_content_item, :content_id, :locale do |_, args|
-  args.with_defaults(locale: "en")
-  type = ENV.fetch("TYPE", "gone")
+    GdsApi.publishing_api.unpublish(args[:content_id],
+                                    locale: args[:locale],
+                                    type:,
+                                    explanation: ENV["EXPLANATION"],
+                                    alternative_path: ENV["URL"])
 
-  GdsApi.publishing_api.unpublish(args[:content_id],
-                                  locale: args[:locale],
-                                  type:,
-                                  explanation: ENV["EXPLANATION"],
-                                  alternative_path: ENV["URL"])
-
-  puts "Unpublished #{args[:content_id]}:#{args[:locale]} from GOV.UK with a type of #{type}"
+    puts "Unpublished #{args[:content_id]}:#{args[:locale]} from GOV.UK with a type of #{type}"
+  end
 end
 
 namespace :vcr do
