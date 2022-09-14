@@ -3,7 +3,11 @@ ENV["APP_ENV"] = "test"
 require "simplecov"
 SimpleCov.start
 
+require "rake"
+
 require_relative "../app"
+load "Rakefile"
+
 require "climate_control"
 require "gds_api/test_helpers/publishing_api"
 require "webmock/rspec"
