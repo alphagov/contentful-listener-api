@@ -4,6 +4,7 @@ RSpec.describe "Receiving a webhook" do
   include Rack::Test::Methods
   include GdsApi::TestHelpers::PublishingApi
   include StubConfig
+  include StubContentful
 
   def app
     Sinatra::Application
