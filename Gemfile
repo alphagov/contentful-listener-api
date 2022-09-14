@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gem "contentful"
 gem "gds-api-adapters"
+gem "govuk_app_config"
 gem "rake"
 gem "sinatra"
 gem "sinatra-contrib"

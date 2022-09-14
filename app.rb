@@ -1,10 +1,14 @@
 $LOAD_PATH << "#{__dir__}/lib"
 require "content_config"
+require "govuk_app_config/govuk_error"
 require "publishing_api"
 require "result"
 require "sinatra"
 require "sinatra/reloader"
 require "webhook"
+
+GovukError.configure
+use Sentry::Rack::CaptureExceptions
 
 post "/listener" do
   begin
