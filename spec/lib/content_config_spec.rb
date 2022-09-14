@@ -56,4 +56,29 @@ RSpec.describe ContentConfig do
       expect(instance.locale).to eq("cy")
     end
   end
+
+  describe "#base_path" do
+    it "returns a base_path if one is set" do
+      instance = described_class.new({
+        "contentful_space_id" => "space-id",
+        "contentful_entry_id" => "entry-id",
+        "content_id" => "content-id",
+        "publishing_api_attributes" => {
+          "base_path" => "/my-path",
+        },
+      })
+
+      expect(instance.base_path).to eq("/my-path")
+    end
+
+    it "returns nil if there isn't a set base_path" do
+      instance = described_class.new({
+        "contentful_space_id" => "space-id",
+        "contentful_entry_id" => "entry-id",
+        "content_id" => "content-id",
+      })
+
+      expect(instance.base_path).to be_nil
+    end
+  end
 end

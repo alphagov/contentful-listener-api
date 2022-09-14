@@ -28,4 +28,8 @@ class ContentConfig
   def locale
     publishing_api_attributes.fetch("locale", "en")
   end
+
+  def base_path
+    publishing_api_attributes["base_path"]
+  end
 end

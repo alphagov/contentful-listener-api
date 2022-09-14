@@ -19,6 +19,18 @@ task :sync_content_item, :content_id, :locale do |_, args|
 
   abort "A content item is not configured for #{args[:content_id]}:#{args[:locale]}" unless content_config
 
+  if ENV["RESERVE_PATH"]
+    if content_config.base_path
+      GdsApi.publishing_api.put_path(
+        content_config.base_path,
+        { publishing_app: PublishingApi::PUBLISHING_APP_NAME },
+      )
+      puts "Reserved #{content_config.base_path} for #{args[:content_id]}:#{args[:locale]}"
+    else
+      abort "A base_path isn't configured for #{args[:content_id]}:#{args[:locale]}"
+    end
+  end
+
   live_result = PublishingApi::Updater.update_live(content_config)
   puts live_result.to_s
   draft_result = PublishingApi::Updater.update_draft(content_config)

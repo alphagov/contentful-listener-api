@@ -1,4 +1,6 @@
-module PublishingApi; end
+module PublishingApi
+  PUBLISHING_APP_NAME = "contentful-listener".freeze
+end
 
 require "publishing_api/affected_content"
 require "publishing_api/content_payload"

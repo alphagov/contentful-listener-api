@@ -17,7 +17,7 @@ module PublishingApi
         "locale" => publishing_api_attributes.fetch("locale", "en"),
         "schema_name" => publishing_api_attributes.fetch("schema_name", "special_route"),
         "document_type" => publishing_api_attributes.fetch("document_type", "special_route"),
-        "publishing_app" => "contentful-listener",
+        "publishing_app" => PUBLISHING_APP_NAME,
         "update_type" => publishing_api_attributes.fetch("update_type", "major"),
         "details" => details,
         "routes" => routes,
