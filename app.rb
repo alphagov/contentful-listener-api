@@ -2,6 +2,7 @@ $LOAD_PATH << "#{__dir__}/lib"
 require "govuk_app_config/govuk_error"
 require "govuk_app_config/govuk_healthcheck"
 require "rack/logstasher"
+require "gds_api/middleware/govuk_header_sniffer"
 require "sinatra"
 require "sinatra/reloader" if development?
 
@@ -21,6 +22,9 @@ configure :production do
 
   # JSON logstash logging for production env
   use Rack::Logstasher::Logger, Logger.new($stdout), extra_request_headers: { "GOVUK-Request-Id" => "govuk_request_id" }
+
+  # HTTP headers that are passed on to subsequent apps
+  use GdsApi::GovukHeaderSniffer, "HTTP_GOVUK_REQUEST_ID"
 end
 
 not_found { "Resource not found\n" }
