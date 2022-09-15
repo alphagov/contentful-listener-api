@@ -13,6 +13,8 @@ require "webhook"
 GovukError.configure
 use Sentry::Rack::CaptureExceptions
 
+not_found { "Resource not found\n" }
+
 get "/healthcheck/live" do
   [200, { "Content-Type" => "text/plain" }, "OK"]
 end
