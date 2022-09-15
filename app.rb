@@ -10,7 +10,8 @@ require "publishing_api"
 require "result"
 require "webhook"
 
-GovukError.configure
+# This file will be auto reloaded in development and this can be configured twice
+GovukError.configure unless GovukError.is_configured?
 use Sentry::Rack::CaptureExceptions
 
 not_found { "Resource not found\n" }
