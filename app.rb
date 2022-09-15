@@ -1,12 +1,13 @@
 $LOAD_PATH << "#{__dir__}/lib"
-require "content_config"
 require "govuk_app_config/govuk_error"
 require "govuk_app_config/govuk_healthcheck"
+require "sinatra"
+require "sinatra/reloader" if development?
+
+require "content_config"
 require "healthcheck/contentful_check"
 require "publishing_api"
 require "result"
-require "sinatra"
-require "sinatra/reloader" if development?
 require "webhook"
 
 GovukError.configure
