@@ -6,7 +6,7 @@ require "healthcheck/contentful_check"
 require "publishing_api"
 require "result"
 require "sinatra"
-require "sinatra/reloader"
+require "sinatra/reloader" if development?
 require "webhook"
 
 GovukError.configure
