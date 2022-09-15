@@ -93,7 +93,7 @@ RSpec.describe "Rake tasks" do
 
       unpublish_request = stub_publishing_api_unpublish(
         content_id,
-        { body: { type: "gone", locale: } },
+        { body: { type: "gone", discard_drafts: true, locale: } },
       )
 
       expect { Rake::Task["content_item:unpublish"].invoke(content_id, locale) }
@@ -107,7 +107,7 @@ RSpec.describe "Rake tasks" do
 
       unpublish_request = stub_publishing_api_unpublish(
         content_id,
-        { body: { type: "gone", locale: "en" } },
+        { body: { type: "gone", discard_drafts: true, locale: "en" } },
       )
 
       expect { Rake::Task["content_item:unpublish"].invoke(content_id) }
@@ -122,7 +122,7 @@ RSpec.describe "Rake tasks" do
 
       unpublish_request = stub_publishing_api_unpublish(
         content_id,
-        { body: { type: "redirect", alternative_path: "/other", locale: } },
+        { body: { type: "redirect", alternative_path: "/other", discard_drafts: true, locale: } },
       )
 
       ClimateControl.modify(TYPE: "redirect", URL: "/other") do
@@ -140,7 +140,7 @@ RSpec.describe "Rake tasks" do
 
       unpublish_request = stub_publishing_api_unpublish(
         content_id,
-        { body: { type: "gone", explanation:, locale: } },
+        { body: { type: "gone", explanation:, discard_drafts: true, locale: } },
       )
 
       ClimateControl.modify(EXPLANATION: explanation) do

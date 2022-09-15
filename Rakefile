@@ -45,6 +45,7 @@ namespace :content_item do
 
     GdsApi.publishing_api.unpublish(args[:content_id],
                                     locale: args[:locale],
+                                    discard_drafts: true,
                                     type:,
                                     explanation: ENV["EXPLANATION"],
                                     alternative_path: ENV["URL"])
