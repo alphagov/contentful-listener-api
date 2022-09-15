@@ -15,6 +15,10 @@ module ContentfulClient
                            space: space_id)
   end
 
+  def self.configured_spaces
+    access_token_config.map { |c| c["space_id"] }
+  end
+
   def self.reset
     @access_token_config = nil
   end

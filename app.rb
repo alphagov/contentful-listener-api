@@ -1,6 +1,8 @@
 $LOAD_PATH << "#{__dir__}/lib"
 require "content_config"
 require "govuk_app_config/govuk_error"
+require "govuk_app_config/govuk_healthcheck"
+require "healthcheck/contentful_check"
 require "publishing_api"
 require "result"
 require "sinatra"
@@ -9,6 +11,14 @@ require "webhook"
 
 GovukError.configure
 use Sentry::Rack::CaptureExceptions
+
+get "/healthcheck/live" do
+  [200, { "Content-Type" => "text/plain" }, "OK"]
+end
+
+get "/healthcheck/ready" do
+  GovukHealthcheck.rack_response(Healthcheck::ContentfulCheck).call
+end
 
 post "/listener" do
   begin

@@ -24,4 +24,11 @@ RSpec.describe ContentfulClient do
         .to raise_error("No access token configuration for space: test")
     end
   end
+
+  describe ".configured_spaces" do
+    it "returns an array of each configured space id" do
+      stub_access_tokens_config(space_id: "test")
+      expect(described_class.configured_spaces).to eq(%w[test])
+    end
+  end
 end
