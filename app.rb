@@ -1,6 +1,7 @@
 $LOAD_PATH << "#{__dir__}/lib"
 require "govuk_app_config/govuk_error"
 require "govuk_app_config/govuk_healthcheck"
+require "rack/logstasher"
 require "sinatra"
 require "sinatra/reloader" if development?
 
@@ -13,6 +14,14 @@ require "webhook"
 # This file will be auto reloaded in development and this can be configured twice
 GovukError.configure unless GovukError.is_configured?
 use Sentry::Rack::CaptureExceptions
+
+configure :production do
+  # disable rack common logger so we can use a JSON one
+  set :logging, nil
+
+  # JSON logstash logging for production env
+  use Rack::Logstasher::Logger, Logger.new($stdout), extra_request_headers: { "GOVUK-Request-Id" => "govuk_request_id" }
+end
 
 not_found { "Resource not found\n" }
 
