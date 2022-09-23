@@ -1,5 +1,5 @@
 module PublishingApi
-  PUBLISHING_APP_NAME = "contentful-listener".freeze
+  PUBLISHING_APP_NAME = "contentful-listener-api".freeze
 end
 
 require "publishing_api/affected_content"

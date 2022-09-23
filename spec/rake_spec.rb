@@ -57,7 +57,7 @@ RSpec.describe "Rake tasks" do
 
       put_path_endpoint = "#{GdsApi::TestHelpers::PublishingApi::PUBLISHING_API_ENDPOINT}/paths"
       put_path_request = stub_request(:put, "#{put_path_endpoint}#{base_path}")
-        .with(body: { publishing_app: "contentful-listener" }.to_json)
+        .with(body: { publishing_app: "contentful-listener-api" }.to_json)
 
       ClimateControl.modify(RESERVE_PATH: "true") do
         expect { Rake::Task["content_item:sync"].invoke(content_id, locale) }

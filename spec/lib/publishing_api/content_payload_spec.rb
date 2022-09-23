@@ -42,7 +42,7 @@ RSpec.describe PublishingApi::ContentPayload do
         "locale" => "en",
         "schema_name" => "special_route",
         "document_type" => "special_route",
-        "publishing_app" => "contentful-listener",
+        "publishing_app" => "contentful-listener-api",
         "update_type" => "major",
         "routes" => [{ "path" => "/hubba", "type" => "exact" }],
         "cms_entity_ids" => ["space-1:Entry:entry-1"],
