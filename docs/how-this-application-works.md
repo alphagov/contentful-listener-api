@@ -10,6 +10,8 @@ Contentful relies upon a [link system between entries][contentful-entries] as a 
 
 ```mermaid
 sequenceDiagram
+    accTitle: Sequence Diagram
+    accDescr: Sequence Diagram of draft content flow between Contentful, this application, and the Publishing API
     actor Publisher
     participant Contentful
     participant ListenerApi as Contentful Listener API
@@ -44,6 +46,8 @@ Once all the content has been updated a summary of the work done will be returne
 
 ```mermaid
 sequenceDiagram
+    accTitle: Sequence Diagram
+    accDescr: Sequence Diagram of live content flow between Contentful, this application, and the Publishing API
     actor Publisher
     participant Contentful
     participant ListenerApi as Contentful Listener API
