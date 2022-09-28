@@ -65,6 +65,10 @@ Once you have completed your development session, you should go into the Content
 [sandbox environment]: https://www.contentful.com/developers/docs/concepts/multiple-environments/
 [create a webhook]: https://www.contentful.com/developers/docs/concepts/webhooks/#create-and-configure-a-webhook
 
+## Further documentation
+
+- [Architectural decision records](docs/adr)
+
 ## Licence
 
 [MIT License](LICENCE)
