@@ -67,6 +67,7 @@ Once you have completed your development session, you should go into the Content
 
 ## Further documentation
 
+- [How this application works](docs/how-this-application-works.md)
 - [Architectural decision records](docs/adr)
 
 ## Licence
