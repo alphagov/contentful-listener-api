@@ -1,5 +1,7 @@
 # Contenful Listener API
 
+**⚠️  This application is experimental 🪄 and is not currently a part of the GOV.UK stack**
+
 An application that keeps content managed in a [Contentful][] CMS instance in-sync with the GOV.UK Publishing API. It listens for Contentful webhooks that affect individual content items and updates GOV.UK content accordingly. It is intended to be used for bespoke pages on GOV.UK which are not handled by the internal GOV.UK CMS tools.
 
 [Contentful]: https://www.contentful.com/
