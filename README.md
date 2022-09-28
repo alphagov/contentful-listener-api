@@ -68,6 +68,8 @@ Once you have completed your development session, you should go into the Content
 ## Further documentation
 
 - [How this application works](docs/how-this-application-works.md)
+- [Configuring a content item](docs/configuring-a-content-item.md)
+- [Removing a content item](docs/removing-a-content-item.md)
 - [Architectural decision records](docs/adr)
 
 ## Licence
