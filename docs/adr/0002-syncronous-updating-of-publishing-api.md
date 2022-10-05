@@ -32,4 +32,4 @@ Accepted
 
 We accept that there is a risk that high volumes of work or poor performance of dependent systems may result in HTTP timeouts, should we exceed the time Contentful provides us to produce a HTTP response.
 
-We understand that by forgoing a retry system (a feature afforded by a background processing system) we rely on the retry mechanism provided by Contentful webhooks as a means to resolve any errors in our server side code. This increases the liklelihood that a problem may lead to the work expected from a webhook to not occur.
+We understand that by forgoing a retry system (a feature afforded by a background processing system) we rely on the retry mechanism provided by Contentful webhooks as a means to resolve any errors in our server side code. This increases the likelihood that a problem may lead to the work expected from a webhook to not occur.
